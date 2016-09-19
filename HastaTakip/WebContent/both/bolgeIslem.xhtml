@@ -1,0 +1,98 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:hal="http://java.sun.com/jsf/composite/composite"
+	contentType="text/html">
+
+	<ui:composition template="/template/commonLayout.xhtml">
+		<ui:define name="content">
+
+			<h:head>
+
+			</h:head>
+
+			<f:event listener="#{userController.adminControl}"
+				type="preRenderView" />
+
+			<h:form id="form"
+				styleClass="paddngLeft15 fnt20 center paddngRight20 paddngBottom20">
+				<p:messages style="margin-bottom:20px;" id="mesaj" closable="true"
+					showDetail="true" showIcon="true"></p:messages>
+				<h:panelGrid border="2" columns="1" id="raporContent">
+
+					<h:panelGrid>
+						<h:outputLabel value="Bolge İşlemleri"></h:outputLabel>
+						<br />
+						<br />
+						<h:outputLabel value="Name"></h:outputLabel>
+						<p:inputText id="name" value="#{bolgeController.bolge.adi}"></p:inputText>
+
+						<p:commandButton value="Bolge Oluştur"
+							actionListener="#{bolgeController.createBolge}" ajax="false"
+							id="subRaporBtn" update="growl,:form:bolgeList">
+						</p:commandButton>
+
+
+						<p:growl id="growl" showDetail="true" sticky="true" />
+
+
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+
+
+					</h:panelGrid>
+
+
+				</h:panelGrid>
+
+
+				<p:dataTable var="bl" value="#{bolgeController.allBolges}"
+					editable="true" id="bolgeList">
+
+					<f:facet name="header">
+        			    Bolge Listesi
+      		 		</f:facet>
+
+
+					<p:ajax event="rowEdit" listener="#{bolgeController.onRowEdit}"
+						update=":form:growl,:form:bolgeList" />
+					<p:ajax event="rowEditCancel"
+						listener="#{bolgeController.onRowCancel}"
+						update=":form:growl,:form:bolgeList" />
+
+
+					<p:column headerText="Name" style="width:150px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{bl.adi}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{bl.adi}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					
+					<p:column headerText="Düzelt-Sil">
+						<p:rowEditor />
+					</p:column>
+
+				</p:dataTable>
+
+
+
+				<p:dialog widgetVar="dlgWait" modal="true" id="dlgWait"
+					closable="false">
+					<p:graphicImage value="/images/InProgress.gif"></p:graphicImage>
+				</p:dialog>
+
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+
+</f:view>

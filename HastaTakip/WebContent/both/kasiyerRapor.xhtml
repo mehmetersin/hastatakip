@@ -1,0 +1,200 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:hal="http://java.sun.com/jsf/composite/composite"
+	contentType="text/html">
+
+	<ui:composition template="/template/commonLayout.xhtml">
+		<ui:define name="content">
+
+			<h:head>
+
+			</h:head>
+
+			<h:form id="form"
+				styleClass="paddngLeft15 fnt10 left paddngRight20 paddngBottom20">
+				<p:messages style="margin-bottom:20px;" id="mesaj" closable="true"
+					showDetail="true" showIcon="true"></p:messages>
+				<h:panelGrid border="2" columns="1" id="raporContent">
+
+					<h:panelGrid>
+						<h:outputLabel value="KASİYER BAZINDA ÖZET VE DETAY RAPOR"></h:outputLabel>
+						<br />
+						<br />
+
+						<h:outputLabel value="Başlangıç Tarihi"></h:outputLabel>
+						<p:calendar value="#{raporController.startDate}"></p:calendar>
+						<h:outputLabel value="Bitiş Tarihi"></h:outputLabel>
+						<p:calendar value="#{raporController.endDate}"></p:calendar>
+
+						<h:outputLabel value="Şube"></h:outputLabel>
+
+						<p:selectOneMenu value="#{raporController.subeId}">
+							<f:selectItems value="#{raporController.allSubes}" var="bl"
+								itemValue="#{bl.id}" itemLabel="#{bl.subeAdi}" />
+						</p:selectOneMenu>
+
+						<p:commandButton value="Getir"
+							actionListener="#{raporController.raporKasiyerOzetGetir}"
+							id="subRaporBtn" update=":form:kasiyerRaporList">
+						</p:commandButton>
+
+
+						<p:dataTable var="kasiyerRapor" id="kasiyerRaporList"
+							value="#{raporController.kasiyerOzetList}"
+							resizableColumns="false" emptyMessage="Uygun Kayıt Bulunamadı"
+							paginator="true" rows="10"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="5,10,15" paginatorPosition="top">
+							<f:facet name="header">
+								<h:outputLabel value="Kasiyer Bazında Rapor" />
+							</f:facet>
+							
+							<p:column>
+								<f:facet name="header">Şube</f:facet>
+								<h:outputText value="#{kasiyerRapor.subeadi}" />
+							</p:column>
+							
+							<p:column>
+								<f:facet name="header">Kasiyer No</f:facet>
+								<h:outputText value="#{kasiyerRapor.kasiyerno}" />
+							</p:column>
+							
+							
+							<p:column style="width:125px;">
+								<f:facet name="header">İşlem Tarihi</f:facet>
+								<h:outputText value="#{kasiyerRapor.islemtarihi}">
+									<f:convertDateTime pattern="dd/MM/yyyy"
+										timeZone="Europe/Istanbul" />
+								</h:outputText>
+							</p:column>
+							<p:column styleClass="txtAlignRght">
+								<f:facet name="header">Fiş İptal Adeti</f:facet>
+								<h:outputText value="#{kasiyerRapor.fisiptaladet}" />
+							</p:column>
+							<p:column styleClass="txtAlignRght">
+								<f:facet name="header">Fiş İptal Toplam Tutar</f:facet>
+								<h:outputText value="#{kasiyerRapor.fisiptaltoplamtutar}">
+									<f:convertNumber pattern="#,##0.00;-#,##0.00" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column styleClass="txtAlignRght">
+								<f:facet name="header">Satır İptal Adeti</f:facet>
+								<h:outputText value="#{kasiyerRapor.satiriptaladeti}" />
+							</p:column>
+							<p:column styleClass="txtAlignRght">
+								<f:facet name="header">Satır İptal Toplam Tutar</f:facet>
+								<h:outputText value="#{kasiyerRapor.satiriptaltoplamtutar}">
+									<f:convertNumber pattern="#,##0.00;-#,##0.00" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column styleClass="txtAlignRght">
+								<f:facet name="header">Satır Düzeltme Adeti</f:facet>
+								<h:outputText value="#{kasiyerRapor.satirduzeltmeadeti}" />
+							</p:column>
+							<p:column styleClass="txtAlignRght">
+								<f:facet name="header">Satır Düzeltme Toplam Tutar</f:facet>
+								<h:outputText value="#{kasiyerRapor.satirduzeltmetoplamtutar}">
+									<f:convertNumber pattern="#,##0.00;-#,##0.00" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column styleClass="txtAlignRght">
+								<f:facet name="header">Kasa Açma Adeti</f:facet>
+								<h:outputText value="#{kasiyerRapor.kasaacmaadeti}" />
+							</p:column>
+							
+							<p:column headerText="Detay" width="120" exportable="false"
+								style="padding-top:0px;padding-bottom:0px;">
+								<p:outputPanel id="detailPnel">
+									<p:commandButton value="Detay"
+										actionListener="#{raporController.raporKasiyerDetayGetir(kasiyerRapor)}"
+										id="buttonDetail" update=":form:kasiyerRaporDetailList"
+										process="@this" />
+								</p:outputPanel>
+							</p:column>
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column footerText="Totals: " style="text-align:right" />
+									<p:column footerText="#{kasiyerRapor.countSum}" />
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+
+					</h:panelGrid>
+
+					<h:commandLink>
+						<img src="../images/excel.png" alt="Excel" height="42" width="42">
+						</img>
+
+						<p:dataExporter type="xls" target="kasiyerRaporList"
+							fileName="kasiyer" pageOnly="false" />
+					</h:commandLink>
+
+					<h:panelGrid columns="1">
+						<p:dataTable var="kasiyerRaporDetail" id="kasiyerRaporDetailList"
+							value="#{raporController.subeDetayList}" resizableColumns="false"
+							emptyMessage="Uygun Kayıt Bulunamadı" paginator="true" rows="10"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="5,10,15" paginatorPosition="top">
+							<f:facet name="header">
+								<h:outputLabel
+									value="#{raporController.tabloUstBilgi} Tarihli Detay Raporu " />
+							</f:facet>
+							<p:column>
+								<f:facet name="header">İptal Tipi</f:facet>
+								<h:outputText value="#{kasiyerRaporDetail.hareketTipi}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">İşlem No</f:facet>
+								<h:outputText value="#{kasiyerRaporDetail.islemno}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">Kasa No</f:facet>
+								<h:outputText value="#{kasiyerRaporDetail.kasano}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">Kasiyer No</f:facet>
+								<h:outputText value="#{kasiyerRaporDetail.kasiyerno}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">Barkod</f:facet>
+								<h:outputText value="#{kasiyerRaporDetail.barkod}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">Tutar</f:facet>
+								<h:outputText value="#{kasiyerRaporDetail.tutar}">
+									<f:convertNumber pattern="#,##0.00;-#,##0.00" />
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+
+					</h:panelGrid>
+
+				</h:panelGrid>
+				<h:commandLink>
+					<img src="../images/excel.png" alt="Excel" height="42" width="42">
+					</img>
+
+					<p:dataExporter type="xls" target="kasiyerRaporDetailList"
+						fileName="kasiyerdetay" pageOnly="false" />
+				</h:commandLink>
+
+				<p:commandButton value="Anasayfaya Dön"
+					action="#{raporController.goToList}" />
+
+				<p:dialog widgetVar="dlgWait" modal="true" id="dlgWait"
+					closable="false">
+					<p:graphicImage value="/images/InProgress.gif"></p:graphicImage>
+				</p:dialog>
+
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+
+</f:view>

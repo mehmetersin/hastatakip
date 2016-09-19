@@ -1,0 +1,140 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:hal="http://java.sun.com/jsf/composite/composite"
+	contentType="text/html">
+
+	<ui:composition template="/template/commonLayout.xhtml">
+		<ui:define name="content">
+
+			<h:head>
+
+			</h:head>
+
+			<h:form id="form"
+				styleClass="paddngLeft15 fnt10 left paddngRight20 paddngBottom20">
+				<p:messages style="margin-bottom:20px;" id="mesaj" closable="true"
+					showDetail="true" showIcon="true"></p:messages>
+				<h:panelGrid border="2" columns="1" id="raporContent">
+
+					<h:panelGrid>
+						<h:outputLabel value="Fiyat Gör RAPOR"></h:outputLabel>
+						<br />
+						<br />
+
+						<h:outputLabel value="Başlangıç Tarihi"></h:outputLabel>
+						<p:calendar value="#{raporController.startDate}"></p:calendar>
+						<h:outputLabel value="Bitiş Tarihi"></h:outputLabel>
+						<p:calendar value="#{raporController.endDate}"></p:calendar>
+
+						<h:outputLabel value="Şube"></h:outputLabel>
+
+						<p:selectOneMenu value="#{raporController.subeId}">
+							<f:selectItems value="#{raporController.allSubes}" var="bl"
+								itemValue="#{bl.id}" itemLabel="#{bl.subeAdi}" />
+						</p:selectOneMenu>
+
+
+						<p:commandButton value="Bütün Şubeler için Getir" 
+							actionListener="#{raporController.raporFiyatGorForAll}"
+							id="subRaporBtn1" update=":form:fiyatGorList">
+						</p:commandButton>
+						
+						<p:commandButton value="Seçilen Şube için Getir"
+							actionListener="#{raporController.raporFiyatGorForSube}"
+							id="subRaporBtn2" update=":form:fiyatGorList">
+						</p:commandButton>
+
+
+						<p:dataTable var="fg" id="fiyatGorList"
+							value="#{raporController.fiyatGorList}" resizableColumns="false"
+							emptyMessage="Uygun Kayıt Bulunamadı" paginator="true" rows="10"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="5,10,15" paginatorPosition="top">
+							<f:facet name="header">
+								<h:outputLabel value="Fiyat Gor Rapor" />
+							</f:facet>
+
+
+							<p:column>
+								<f:facet name="header">Kasa No</f:facet>
+								<h:outputText value="#{fg.kasaNo}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">İşlem No</f:facet>
+								<h:outputText value="#{fg.islemNo}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">Kasiyer No</f:facet>
+								<h:outputText value="#{fg.kasiyerNo}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">Şube</f:facet>
+								<h:outputText value="#{fg.sube.subeAdi}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">Barkod</f:facet>
+								<h:outputText value="#{fg.barkod}" />
+							</p:column>
+
+							<p:column style="width:125px;">
+								<f:facet name="header">Tarih</f:facet>
+								<h:outputText value="#{fg.tarih}">
+									<f:convertDateTime pattern="dd/MM/yyyy"
+										timeZone="Europe/Istanbul" />
+								</h:outputText>
+							</p:column>
+
+
+
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column footerText="Totals: " style="text-align:right" />
+									<p:column footerText="#{kasiyerRapor.countSum}" />
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+
+					</h:panelGrid>
+
+					<h:commandLink>
+						<img src="../images/csv.png" alt="Csv" height="42" width="42">
+						</img>
+
+						<p:dataExporter type="csv" target="fiyatGorList"
+							fileName="fiyatGorCsv" pageOnly="false" />
+					</h:commandLink>
+
+					<h:commandLink>
+						<img src="../images/excel.png" alt="Excel" height="42" width="42">
+						</img>
+
+						<p:dataExporter type="xls" target="fiyatGorList"
+							fileName="fiyatGorExcel" pageOnly="false" />
+					</h:commandLink>
+
+
+
+				</h:panelGrid>
+
+
+				<p:commandButton value="Anasayfaya Dön"
+					action="#{raporController.goToList}" />
+
+				<p:dialog widgetVar="dlgWait" modal="true" id="dlgWait"
+					closable="false">
+					<p:graphicImage value="/images/InProgress.gif"></p:graphicImage>
+				</p:dialog>
+
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+
+</f:view>

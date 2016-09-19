@@ -1,0 +1,127 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:hal="http://java.sun.com/jsf/composite/composite"
+	contentType="text/html">
+
+	<ui:composition template="/template/commonLayout.xhtml">
+		<ui:define name="content">
+
+			<h:head>
+
+			</h:head>
+
+			<h:form id="form"
+				styleClass="paddngLeft15 fnt20 center paddngRight5 paddngBottom20">
+				<p:messages style="margin-bottom:30px;" id="mesaj" closable="true"
+					showDetail="true" showIcon="true"></p:messages>
+				<h:panelGrid columns="1" layout="grid">
+					<h:panelGrid columns="1">
+
+						<p:commandButton style="width:400px;" value="İşlemler"
+							disabled="true">
+						</p:commandButton>
+						<p:commandButton style="width:400px;"
+							value="Şubeden Dosya Al ve İşleme"
+							action="#{islemController.goToPage()}">
+						</p:commandButton>
+						
+						<p:commandButton style="width:400px;"
+							value="Randevu Aç"
+							action="#{randevuController.goToPage()}">
+						</p:commandButton>
+						
+						<p:commandButton style="width:400px;" value="Kullanıcı İşlemleri"
+							action="#{userController.goToPage()}"
+							disabled="#{userController.isNormalUser()}">
+						</p:commandButton>
+
+						<p:commandButton style="width:400px;" value="Şube İşlemleri"
+							action="#{subeController.goToPage()}"
+							disabled="#{userController.isNormalUser()}">
+						</p:commandButton>
+						
+						<p:commandButton style="width:400px;" value="Hasta İşlemleri"
+							action="#{hastaController.goToPage()}"
+							disabled="#{userController.isNormalUser()}">
+						</p:commandButton>
+
+
+						<p:commandButton style="width:400px;" value="Bölge İşlemleri"
+							action="#{bolgeController.goToPage()}"
+							disabled="#{userController.isNormalUser()}">
+						</p:commandButton>
+
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" layout="grid">
+					<h:panelGrid columns="1">
+
+						<p:commandButton style="width:400px;" value="Raporlar"
+							disabled="true">
+						</p:commandButton>
+
+					</h:panelGrid>
+				</h:panelGrid>
+
+
+				<h:panelGrid columns="1">
+					<h:panelGrid columns="1">
+
+
+
+						<p:commandButton style="width:400px;"
+							value="Şube Bazında Özet ve Detay Rapor"
+							action="#{raporController.goToRapor(1)}">
+						</p:commandButton>
+
+						<p:commandButton style="width:400px;"
+							value="Kasa Bazında Özet ve Detay Rapor"
+							action="#{raporController.goToRapor(2)}">
+						</p:commandButton>
+
+						<p:commandButton style="width:400px;"
+							value="Kasiyer Bazında Özet ve Detay Rapor"
+							action="#{raporController.goToRapor(3)}">
+						</p:commandButton>
+
+
+
+						<p:commandButton style="width:400px;"
+							value="Dosya İşlemleri Rapor"
+							action="#{raporController.goToRapor(5)}">
+						</p:commandButton>
+						
+							<p:commandButton style="width:400px;"
+							value="Fiyat Gör Rapor"
+							action="#{raporController.goToRapor(6)}">
+						</p:commandButton>
+
+					<p:commandButton style="width:400px;"
+							value="Şube Detay Raporu (New)"
+							action="#{raporController.goToRapor(7)}">
+						</p:commandButton>
+
+					</h:panelGrid>
+				</h:panelGrid>
+
+
+
+				<p:dialog widgetVar="dlgWait" modal="true" id="dlgWait"
+					closable="false">
+					<p:graphicImage value="/images/InProgress.gif"></p:graphicImage>
+				</p:dialog>
+
+
+
+
+
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+
+</f:view>

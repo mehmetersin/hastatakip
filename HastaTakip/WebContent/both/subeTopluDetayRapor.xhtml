@@ -1,0 +1,131 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:hal="http://java.sun.com/jsf/composite/composite"
+	contentType="text/html">
+
+	<ui:composition template="/template/commonLayout.xhtml">
+		<ui:define name="content">
+
+			<h:head>
+
+			</h:head>
+
+			<h:form id="form"
+				styleClass="paddngLeft15 fnt10 left paddngRight20 paddngBottom20">
+				<p:messages style="margin-bottom:20px;" id="mesaj" closable="true"
+					showDetail="true" showIcon="true"></p:messages>
+				<h:panelGrid border="2" columns="1" id="raporContent">
+
+					<h:panelGrid>
+						<h:outputLabel value="Şube Detay Rapor"></h:outputLabel>
+						<br />
+						<br />
+
+						<h:outputLabel value="Başlangıç Tarihi"></h:outputLabel>
+						<p:calendar value="#{raporController.startDate}"></p:calendar>
+						<h:outputLabel value="Bitiş Tarihi"></h:outputLabel>
+						<p:calendar value="#{raporController.endDate}"></p:calendar>
+
+
+						<p:commandButton value="Getir"
+							actionListener="#{raporController.raporTopluSubeDetayGetir}"
+							id="subRaporBtn" update=":form:subeTopluDetayList">
+						</p:commandButton>
+
+
+						<p:dataTable var="fg" id="subeTopluDetayList"
+							value="#{raporController.subeTopluDetayList}"
+							resizableColumns="false" emptyMessage="Uygun Kayıt Bulunamadı"
+							paginator="true" rows="10"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="5,10,15" paginatorPosition="top">
+							<f:facet name="header">
+								<h:outputLabel value="Sube Toplu Detay Raporu" />
+							</f:facet>
+
+
+							<p:column>
+								<f:facet name="header">Bölge İsmi</f:facet>
+								<h:outputText value="#{fg.bolgeadi}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">Sap Kodu</f:facet>
+								<h:outputText value="#{fg.sapKodu}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">Şube Adı</f:facet>
+								<h:outputText value="#{fg.subeAdi}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">Kasiyer No</f:facet>
+								<h:outputText value="#{fg.kasiyerno}" />
+							</p:column>
+
+							<p:column style="width:125px;">
+								<f:facet name="header">Tarih</f:facet>
+								<h:outputText value="#{fg.islemtarihi}">
+									<f:convertDateTime pattern="dd/MM/yyyy"
+										timeZone="Europe/Istanbul" />
+								</h:outputText>
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">Kasa No</f:facet>
+								<h:outputText value="#{fg.kasano}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">İşlem Tipi</f:facet>
+								<h:outputText value="#{fg.hareketTipi}" />
+							</p:column>
+
+
+							<p:column styleClass="txtAlignRght">
+								<f:facet name="header">Tutar</f:facet>
+								<h:outputText value="#{fg.tutar}">
+									<f:convertNumber pattern="#,##0.00;-#,##0.00" />
+								</h:outputText>
+							</p:column>
+
+
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column footerText="Totals: " style="text-align:right" />
+									<p:column footerText="#{subeTopluDetayList.size()}" />
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+
+					</h:panelGrid>
+
+					<h:commandLink>
+						<img src="../images/excel.png" alt="Excel" height="42" width="42">
+						</img>
+
+						<p:dataExporter type="xls" target="subeTopluDetayList"
+							fileName="subeTopluDetayRapor" pageOnly="false" />
+					</h:commandLink>
+
+				</h:panelGrid>
+
+
+				<p:commandButton value="Anasayfaya Dön"
+					action="#{raporController.goToList}" />
+
+				<p:dialog widgetVar="dlgWait" modal="true" id="dlgWait"
+					closable="false">
+					<p:graphicImage value="/images/InProgress.gif"></p:graphicImage>
+				</p:dialog>
+
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+
+</f:view>

@@ -1,0 +1,124 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:hal="http://java.sun.com/jsf/composite/composite"
+	contentType="text/html">
+
+	<ui:composition template="/template/commonLayout.xhtml">
+		<ui:define name="content">
+
+			<h:head>
+
+			</h:head>
+
+			<f:event listener="#{userController.adminControl}" type="preRenderView" />
+
+			<h:form id="form"
+				styleClass="paddngLeft15 fnt20 center paddngRight20 paddngBottom20">
+				<p:messages style="margin-bottom:20px;" id="mesaj" closable="true"
+					showDetail="true" showIcon="true"></p:messages>
+				<h:panelGrid border="2" columns="1" id="raporContent">
+
+					<h:panelGrid>
+						<h:outputLabel value="Kullanıcı İşlemleri"></h:outputLabel>
+						<br />
+						<br />
+						<h:outputLabel value="Name"></h:outputLabel>
+						<p:inputText id="name" value="#{userController.user.name}"></p:inputText>
+
+						<h:outputLabel value="Email"></h:outputLabel>
+						<p:inputText id="email" value="#{userController.user.email}"></p:inputText>
+
+						<h:outputLabel value="Password"></h:outputLabel>
+						<p:inputText id="password" value="#{userController.user.pass}"></p:inputText>
+
+						<h:outputLabel value="Role"></h:outputLabel>
+
+						<p:selectOneMenu value="#{userController.user.role}">
+							<f:selectItems value="#{userController.roleList}" var="roles"
+								itemValue="#{roles}" itemLabel="#{roles.label}" />
+						</p:selectOneMenu>
+
+
+
+
+						<p:commandButton value="Kullanıcı Oluştur"
+							actionListener="#{userController.createUser}" ajax="false"
+							id="subRaporBtn" update="growl,:form:userList">
+						</p:commandButton>
+
+
+						<p:growl id="growl" showDetail="true" sticky="true" />
+
+
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+
+
+					</h:panelGrid>
+
+
+				</h:panelGrid>
+
+
+				<p:dataTable var="user" value="#{userController.allUsers}"
+					editable="true" id="userList">
+
+					<f:facet name="header">
+            Kullanıcı Listesi
+        </f:facet>
+
+
+					<p:ajax event="rowEdit" listener="#{userController.onRowEdit}"
+						update=":form:growl,:form:userList" />
+					<p:ajax event="rowEditCancel"
+						listener="#{userController.onRowCancel}"
+						update=":form:growl,:form:userList" />
+
+
+					<p:column headerText="Name" style="width:150px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{user.name}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{user.name}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Email" style="width:150px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{user.email}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{user.email}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+
+					<p:column headerText="Düzelt-Sil">
+						<p:rowEditor />
+					</p:column>
+
+				</p:dataTable>
+
+
+
+				<p:dialog widgetVar="dlgWait" modal="true" id="dlgWait"
+					closable="false">
+					<p:graphicImage value="/images/InProgress.gif"></p:graphicImage>
+				</p:dialog>
+
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+
+</f:view>

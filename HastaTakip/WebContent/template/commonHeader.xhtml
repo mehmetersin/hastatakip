@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<h:outputStylesheet library="css" name="style.css" />
+	<ui:composition>
+		<h:form id="menuForm" styleClass="font10">
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false">
+				<h:graphicImage value="/loading.gif"></h:graphicImage>
+			</p:dialog>
+			
+			<p:tabMenu id="tabAdmin" activeIndex="0">
+				<p:menuitem value="ANASAYFA" url="/mainPage.jsf" icon="ui-icon-home" />
+				
+			</p:tabMenu>
+
+			<!--<p:tabMenu id="tabUser" activeIndex="0" rendered="#{loginAuthenticator.menuUser}">
+				<p:menuitem value="ANASAYFA" url="/mainPage.jsf" icon="ui-icon-home" />
+			</p:tabMenu>-->
+
+		</h:form>
+
+		<p:messages id="msgs" showDetail="true" autoUpdate="true"
+			closable="true"></p:messages>
+
+	</ui:composition>
+</h:body>
+
+</html>

@@ -1,0 +1,107 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:hal="http://java.sun.com/jsf/composite/composite"
+	contentType="text/html">
+
+	<ui:composition template="/template/commonLayout.xhtml">
+		<ui:define name="content">
+
+			<h:head>
+
+			</h:head>
+
+			<h:form>
+				<p:growl id="messages" showDetail="true" />
+
+				<h:panelGrid columnClasses="value">
+					<h3 style="margin-top: 0">Randevu Planı</h3>
+					<p:schedule id="schedule" value="#{randevuController.eventModel}"
+						widgetVar="myschedule" timeZone="GMT+2" locale="tr">
+
+						<p:ajax event="dateSelect"
+							listener="#{randevuController.onDateSelect}"
+							update="eventDetails" oncomplete="PF('eventDialog').show();" />
+						<p:ajax event="eventSelect"
+							listener="#{randevuController.onEventSelect}"
+							update="eventDetails" oncomplete="PF('eventDialog').show();" />
+						<p:ajax event="eventMove"
+							listener="#{randevuController.onEventMove}" update="messages" />
+						<p:ajax event="eventResize"
+							listener="#{randevuController.onEventResize}" update="messages" />
+
+					</p:schedule>
+
+
+				</h:panelGrid>
+
+				<p:dialog widgetVar="eventDialog" header="Event Details"
+					showEffect="clip" hideEffect="clip">
+					<h:panelGrid id="eventDetails" columns="2">
+
+
+						<h:outputLabel value="Hasta"></h:outputLabel>
+
+						<p:selectOneMenu value="#{randevuController.hastaDosyaNo}">
+							<f:selectItems value="#{randevuController.allHastaList}" var="bl"
+								itemValue="#{bl.dosyaNo}" itemLabel="#{bl.adSoyad}" />
+						</p:selectOneMenu>
+
+
+						<p:outputLabel for="from" value="From:" />
+						<p:calendar id="from" value="#{randevuController.event.startDate}"
+							timeZone="GMT+2" pattern="dd/MM/yyyy HH:mm" />
+
+						<p:outputLabel for="to" value="To:" />
+						<p:calendar id="to" value="#{randevuController.event.endDate}"
+							timeZone="GMT+2" pattern="dd/MM/yyyy HH:mm" />
+
+						<p:commandButton type="reset" value="Reset" />
+						<p:commandButton id="addButton" value="Kaydet"
+							actionListener="#{randevuController.addEvent}"
+							oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+						<p:commandButton id="deleteButton" value="Sil"
+							actionListener="#{randevuController.deleteEvent}"
+							oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+					</h:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<script type="text/javascript">
+				PrimeFaces.locales['tr'] = {
+					closeText : 'kapat',
+					prevText : 'geri',
+					nextText : 'ileri',
+					currentText : 'bugün',
+					monthNames : [ 'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs',
+							'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim',
+							'Kasım', 'Aralık' ],
+					monthNamesShort : [ 'Oca', 'Şub', 'Mar', 'Nis', 'May',
+							'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara' ],
+					dayNames : [ 'Pazar', 'Pazartesi', 'Salı', 'Çarşamba',
+							'Perşembe', 'Cuma', 'Cumartesi' ],
+					dayNamesShort : [ 'Pz', 'Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct' ],
+					dayNamesMin : [ 'Pz', 'Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct' ],
+					weekHeader : 'Hf',
+					firstDay : 1,
+					isRTL : false,
+					showMonthAfterYear : false,
+					yearSuffix : '',
+					month : 'Ay',
+					week : 'Hafta',
+					day : 'Gün',
+					allDayText : 'Tüm Gün'
+				};
+			</script>
+			<style type="text/css">
+.value {
+	width: 1000px;
+}
+</style>
+
+		</ui:define>
+	</ui:composition>
+
+</f:view>

@@ -1,0 +1,120 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:hal="http://java.sun.com/jsf/composite/composite"
+	contentType="text/html">
+
+	<ui:composition template="/template/commonLayout.xhtml">
+		<ui:define name="content">
+
+			<h:head>
+
+			</h:head>
+
+			<h:form id="form"
+				styleClass="paddngLeft15 fnt10 left paddngRight20 paddngBottom20">
+				<p:messages style="margin-bottom:20px;" id="mesaj" closable="true"
+					showDetail="true" showIcon="true"></p:messages>
+				<h:panelGrid border="2" columns="1" id="raporContent">
+
+					<h:panelGrid>
+						<h:outputLabel value="DOSYA TRANSFER - ISLEME RAPOR"></h:outputLabel>
+						<br />
+						<br />
+						<h:outputLabel value="Başlangıç Tarihi"></h:outputLabel>
+						<p:calendar id="startDate" value="#{raporController.startDate}"></p:calendar>
+						<h:outputLabel value="Bitiş Tarihi"></h:outputLabel>
+						<p:calendar id="endDate" value="#{raporController.endDate}"></p:calendar>
+
+						<p:commandButton value="Getir"
+							actionListener="#{raporController.eventRaporGetir}"
+							id="subRaporBtn" update=":form:eventRaporList">
+						</p:commandButton>
+
+
+						<p:dataTable  var="event" id="eventRaporList"
+							value="#{raporController.eventList}" resizableColumns="false"
+							emptyMessage="Uygun Kayıt Bulunamadı" paginator="true" rows="10"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="5,10,15" paginatorPosition="top">
+							<f:facet name="header">
+								<h:outputLabel value="Dosya Transfer - İşlemi Rapor" />
+							</f:facet>
+							<p:column>
+								<f:facet name="header">Şube Adı</f:facet>
+								<h:outputText value="#{event.sube.subeAdi}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">Kullanıcı</f:facet>
+								<h:outputText value="#{event.kullanici.name}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">İşlem Tipi</f:facet>
+								<h:outputText value="#{event.eventType}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">Durum</f:facet>
+								<h:outputText value="#{event.durum}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">Dosya İsmi</f:facet>
+								<h:outputText value="#{event.fileName}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">Dosya Tarihi</f:facet>
+								<h:outputText value="#{event.dosyaTarihi}" />
+
+							</p:column>
+							<p:column>
+								<f:facet name="header">Başlangıç Tarihi</f:facet>
+								<h:outputText value="#{event.baslangicTarih}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">Bitiş Tarihi</f:facet>
+								<h:outputText value="#{event.bitisTarih}" />
+
+							</p:column>
+							<p:column exportable="false">
+								<f:facet name="header">İşlem</f:facet>
+								<p:commandButton value="Tekrar İşle"
+									disabled="#{event.isRetry()}"
+									actionListener="#{islemController.processFile(event)}"
+									id="subRaporBtn">
+
+								</p:commandButton>
+							</p:column>
+
+
+						</p:dataTable>
+
+					</h:panelGrid>
+
+				</h:panelGrid>
+
+
+
+
+				<h:commandLink>
+					<img src="../images/excel.png" alt="Excel" height="42" width="42">
+					</img>
+
+					<p:dataExporter type="xls" target="eventRaporList"
+						fileName="dosyaislemleri" pageOnly="false" />
+				</h:commandLink>
+
+
+
+
+				<p:dialog widgetVar="dlgWait" modal="true" id="dlgWait"
+					closable="false">
+					<p:graphicImage value="/images/InProgress.gif"></p:graphicImage>
+				</p:dialog>
+
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+
+</f:view>

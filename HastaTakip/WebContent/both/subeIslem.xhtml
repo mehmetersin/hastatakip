@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:hal="http://java.sun.com/jsf/composite/composite"
+	contentType="text/html">
+
+	<ui:composition template="/template/commonLayout.xhtml">
+		<ui:define name="content">
+
+			<h:head>
+
+			</h:head>
+
+			<f:event listener="#{userController.adminControl}"
+				type="preRenderView" />
+
+			<h:form id="form"
+				styleClass="paddngLeft15 fnt20 center paddngRight20 paddngBottom20">
+				<p:messages style="margin-bottom:20px;" id="mesaj" closable="true"
+					showDetail="true" showIcon="true"></p:messages>
+				<h:panelGrid border="2" columns="1" id="raporContent">
+
+					<h:panelGrid>
+						<h:outputLabel value="Şube İşlemleri"></h:outputLabel>
+						<br />
+						<br />
+						<h:outputLabel value="İsim"></h:outputLabel>
+						<p:inputText id="name" value="#{subeController.sube.subeAdi}"></p:inputText>
+
+						<h:outputLabel value="Url"></h:outputLabel>
+						<p:inputText id="email" value="#{subeController.sube.url}"></p:inputText>
+
+						<h:outputLabel value="Kullanıcı İsmi"></h:outputLabel>
+						<p:inputText id="username" value="#{subeController.sube.userName}"></p:inputText>
+
+						<h:outputLabel value="Password"></h:outputLabel>
+						<p:inputText id="password" value="#{subeController.sube.pass}"></p:inputText>
+
+						<h:outputLabel value="Sap Kodu"></h:outputLabel>
+						<p:inputText id="sapKodu" value="#{subeController.sube.sapKodu}"></p:inputText>
+
+						<h:outputLabel value="Ftp Klasörü"></h:outputLabel>
+						<p:inputText id="ftpDirectoryPath"
+							value="#{subeController.sube.ftpDirectoryPath}"></p:inputText>
+
+						<h:outputLabel value="Ftp Port"></h:outputLabel>
+						<p:inputText id="ftpPort" value="#{subeController.sube.ftpPort}"></p:inputText>
+
+						<h:outputLabel value="Bağlantı Tipi"></h:outputLabel>
+
+						<p:selectOneMenu value="#{subeController.sube.baglantiTipi}">
+							<f:selectItems value="#{subeController.baglantiList}" var="bt"
+								itemValue="#{bt}" itemLabel="#{bt.label}" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Bölge No"></h:outputLabel>
+
+						<p:selectOneMenu value="#{subeController.bolgeId}">
+							<f:selectItems value="#{subeController.bolgeList}" var="bl"
+								itemValue="#{bl.id}" itemLabel="#{bl.adi}" />
+						</p:selectOneMenu>
+
+
+
+						<p:commandButton value="Şube Kaydet"
+							actionListener="#{subeController.createSube}" ajax="false"
+							id="subRaporBtn" update="growl,:form:subeList">
+						</p:commandButton>
+
+
+						<p:growl id="growl" showDetail="true" sticky="true" />
+
+
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+
+
+					</h:panelGrid>
+
+
+				</h:panelGrid>
+
+
+
+
+
+
+				<p:dataTable var="sb" value="#{subeController.allSubes}"
+					paginator="true" rows="10"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15" paginatorPosition="top"
+					editable="true" id="subeList">
+
+					<f:facet name="header">
+        			    Şube Listesi
+      		 		</f:facet>
+
+
+
+					<p:column headerText="Name" style="width:150px"
+						filterBy="#{sb.subeAdi}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.subeAdi}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.subeAdi}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Url" style="width:150px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.url}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.url}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Username" style="width:100px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.userName}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.userName}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Password" style="width:60px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.pass}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.pass}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+
+
+
+					<p:column headerText="Ftp Klasörü" style="width:75px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.ftpDirectoryPath}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.ftpDirectoryPath}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+
+
+					<p:column headerText="Sap Kodu" style="width:75px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.sapKodu}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.sapKodu}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+
+					<p:column headerText="Ftp Port" style="width:50px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.ftpPort}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.ftpPort}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Baglanti Tipi" style="width:175px">
+
+
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.baglantiTipi}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:selectOneMenu value="#{sb.baglantiTipi}" style="width:100%">
+									<f:selectItems value="#{subeController.baglantiList}" var="bt"
+										itemValue="#{bt}" itemLabel="#{bt.label}" />
+								</p:selectOneMenu>
+
+							</f:facet>
+						</p:cellEditor>
+
+					</p:column>
+
+					<p:column headerText="Bölge" style="width:105px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.bolge.adi}" />
+							</f:facet>
+							<f:facet name="input">
+
+
+								<p:selectOneMenu value="#{subeController.bolgeId}">
+									<f:selectItems value="#{subeController.bolgeList}" var="bl"
+										itemValue="#{bl.id}" itemLabel="#{bl.adi}" />
+								</p:selectOneMenu>
+
+
+
+							</f:facet>
+						</p:cellEditor>
+
+
+
+
+					</p:column>
+
+
+
+					<p:column headerText="Sube Id" style="display: none">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.id}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.id}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+
+					<p:ajax event="rowEdit" listener="#{subeController.onRowEdit}"
+						update=":form:growl,:form:subeList" />
+					<p:ajax event="rowEditCancel"
+						listener="#{subeController.onRowCancel}"
+						update=":form:growl,:form:subeList" />
+
+					<p:column exportable="false" headerText="Düzelt-Sil">
+						<p:rowEditor />
+
+					</p:column>
+
+				</p:dataTable>
+
+
+
+				<p:dialog widgetVar="dlgWait" modal="true" id="dlgWait"
+					closable="false">
+					<p:graphicImage value="/images/InProgress.gif"></p:graphicImage>
+				</p:dialog>
+
+				<h:commandLink>
+					<img src="../images/excel.png" alt="Excel" height="42" width="42">
+					</img>
+
+					<p:dataExporter type="xls" target="subeList"
+						fileName="subeListesi" pageOnly="false" />
+				</h:commandLink>
+
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+
+</f:view>

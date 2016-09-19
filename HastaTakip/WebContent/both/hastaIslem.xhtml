@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:hal="http://java.sun.com/jsf/composite/composite"
+	contentType="text/html">
+
+	<ui:composition template="/template/commonLayout.xhtml">
+		<ui:define name="content">
+
+			<h:head>
+				<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+			</h:head>
+
+			<f:event listener="#{userController.adminControl}"
+				type="preRenderView" />
+
+			<h:form id="form"
+				styleClass="paddngLeft15 fnt20 center paddngRight20 paddngBottom20">
+				<p:messages style="margin-bottom:20px;" id="mesaj" closable="true"
+					showDetail="true" showIcon="true"></p:messages>
+				<h:panelGrid border="0" columns="1" id="raporContent">
+
+					<h:outputLabel value="Hasta Kayıt İşlemleri"></h:outputLabel>
+					<br/>
+					<h:panelGrid columns="4" layout="grid">
+
+						<h:outputLabel value="Ad Soyad"></h:outputLabel>
+						<p:inputText id="name" value="#{hastaController.hasta.adSoyad}"></p:inputText>
+
+						<h:outputLabel value="Tc Kimlik No"></h:outputLabel>
+						<p:inputText id="tcNo" value="#{hastaController.hasta.tcNo}"></p:inputText>
+
+						<h:outputLabel value="Doğum Yeri"></h:outputLabel>
+						<p:inputText id="dogumYeri"
+							value="#{hastaController.hasta.dogumYeri}"></p:inputText>
+
+						<h:outputLabel value="Doğum Tarihi"></h:outputLabel>
+						<p:calendar id="dogumTarihi" yearRange="c-100:c-17"
+							value="#{hastaController.hasta.dogumTarihi}"></p:calendar>
+
+						<h:outputLabel value="Baba Adı"></h:outputLabel>
+						<p:inputText id="babaAdi" value="#{hastaController.hasta.babaAdi}"></p:inputText>
+
+						<h:outputLabel value="Anne Adı"></h:outputLabel>
+						<p:inputText id="anneAdi" value="#{hastaController.hasta.anneAdi}"></p:inputText>
+
+						<h:outputLabel value="Telefon No"></h:outputLabel>
+						<p:inputText id="telefonNo"
+							value="#{hastaController.hasta.telefonNo}"></p:inputText>
+
+						<h:outputLabel value="Adres"></h:outputLabel>
+						<p:inputTextarea rows="3" cols="33" id="adres"
+							value="#{hastaController.hasta.adres}"></p:inputTextarea>
+
+						<h:outputLabel value="Cinsiyet"></h:outputLabel>
+
+						<p:selectOneMenu value="#{hastaController.hasta.cinsiyet}">
+							<f:selectItems value="#{hastaController.cinsiyetList}" var="bt"
+								itemValue="#{bt}" itemLabel="#{bt.label}" />
+						</p:selectOneMenu>
+
+
+						<h:outputLabel value="Medeni Durum"></h:outputLabel>
+
+						<p:selectOneMenu value="#{hastaController.hasta.medeniDurum}">
+							<f:selectItems value="#{hastaController.medeniDurumList}"
+								var="bt" itemValue="#{bt}" itemLabel="#{bt.label}" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Kan Grubu"></h:outputLabel>
+
+						<p:selectOneMenu value="#{hastaController.hasta.kanGrubu}">
+							<f:selectItems value="#{hastaController.kanGrubusList}" var="bt"
+								itemValue="#{bt}" itemLabel="#{bt.label}" />
+						</p:selectOneMenu>
+
+
+						<h:outputLabel value="Şehir"></h:outputLabel>
+
+						<p:selectOneMenu value="#{hastaController.sehirId}">
+							<f:selectItems value="#{hastaController.sehirList}" var="bl"
+								itemValue="#{bl.id}" itemLabel="#{bl.adi}" />
+						</p:selectOneMenu>
+
+
+
+						<p:commandButton value="Hasta Kaydet"
+							actionListener="#{hastaController.createHasta}" ajax="false"
+							id="hasRaporBtn" update="growl,:form:hastaList">
+						</p:commandButton>
+
+
+						<p:growl id="growl" showDetail="true" sticky="true" />
+
+
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+
+
+					</h:panelGrid>
+
+
+				</h:panelGrid>
+
+
+
+
+
+
+				<p:dataTable var="sb" value="#{hastaController.allHasta}"
+					paginator="true" rows="10"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15" paginatorPosition="top"
+					editable="true" id="hastaList">
+
+					<f:facet name="header">
+        			    - Hasta Listesi -
+      		 		</f:facet>
+
+					<p:ajax event="rowEdit" listener="#{hastaController.onRowEdit}"
+						update=":form:growl,:form:hastaList" />
+					<p:ajax event="rowEditCancel"
+						listener="#{hastaController.onRowCancel}"
+						update=":form:growl,:form:hastaList" />
+
+					<p:column exportable="false" headerText="Düzelt-Sil" style="width:80px" >
+						<p:rowEditor />
+
+					</p:column>
+
+
+					<p:column headerText="Ad Soyad" style="width:150px"
+						filterBy="#{sb.adSoyad}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.adSoyad}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.adSoyad}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+
+					<p:column headerText="Tc Kimlik No" style="width:150px"
+						filterBy="#{sb.tcNo}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.tcNo}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.tcNo}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Doğum Yeri" style="width:150px"
+						filterBy="#{sb.dogumYeri}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.dogumYeri}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.dogumYeri}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Doğum Tarihi" style="width:150px"
+						filterBy="#{sb.dogumTarihi}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.dogumTarihi}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:calendar value="#{sb.dogumTarihi}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Baba Adı" style="width:150px"
+						filterBy="#{sb.babaAdi}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.babaAdi}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.babaAdi}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Anne Adı" style="width:150px"
+						filterBy="#{sb.anneAdi}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.anneAdi}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.anneAdi}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+
+					<p:column headerText="Telefon No" style="width:150px"
+						filterBy="#{sb.telefonNo}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.telefonNo}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.telefonNo}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Cinsiyet" style="width:55px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.cinsiyet.label}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:selectOneMenu value="#{sb.cinsiyet}">
+									<f:selectItems value="#{hastaController.cinsiyetList}" var="bt"
+										itemValue="#{bt}" itemLabel="#{bt.label}" />
+								</p:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Medeni Durum" style="width:55px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.medeniDurum.label}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:selectOneMenu value="#{sb.medeniDurum}">
+									<f:selectItems value="#{hastaController.medeniDurumList}"
+										var="bt" itemValue="#{bt}" itemLabel="#{bt.label}" />
+								</p:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Kan Grubu" style="width:55px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.kanGrubu.label}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:selectOneMenu value="#{sb.kanGrubu}">
+									<f:selectItems value="#{hastaController.kanGrubusList}"
+										var="bt" itemValue="#{bt}" itemLabel="#{bt.label}" />
+								</p:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					
+					<p:column headerText="Şehir" style="width:55px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.sehir.adi}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:selectOneMenu value="#{hastaController.sehirId}">
+								
+								<f:selectItem itemLabel="#{sb.sehir.adi}"  itemValue="#{sb.sehir.id}" ></f:selectItem>
+									<f:selectItems value="#{hastaController.sehirList}" 
+										var="bt" itemValue="#{bt.id}" itemLabel="#{bt.adi}" />
+								</p:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+
+					<p:column headerText="Adres" style="width:150px"
+						filterBy="#{sb.adres}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.adres}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.adres}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+
+					
+
+				</p:dataTable>
+
+
+
+				<p:dialog widgetVar="dlgWait" modal="true" id="dlgWait"
+					closable="false">
+					<p:graphicImage value="/images/InProgress.gif"></p:graphicImage>
+				</p:dialog>
+
+				<h:commandLink>
+					<img src="../images/excel.png" alt="Excel" height="42" width="42">
+					</img>
+
+					<p:dataExporter type="xls" target="hastaList"
+						fileName="hastaListesi" pageOnly="false" />
+				</h:commandLink>
+
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+
+</f:view>

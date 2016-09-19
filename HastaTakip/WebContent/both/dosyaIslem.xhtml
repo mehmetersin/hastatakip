@@ -1,0 +1,81 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:hal="http://java.sun.com/jsf/composite/composite"
+	contentType="text/html">
+
+	<ui:composition template="/template/commonLayout.xhtml">
+		<ui:define name="content">
+
+			<h:head>
+
+			</h:head>
+
+			<h:form id="form"
+				styleClass="paddngLeft15 fnt20 center paddngRight20 paddngBottom20">
+				<p:messages style="margin-bottom:20px;" id="mesaj" closable="true"
+					showDetail="true" showIcon="true"></p:messages>
+				<h:panelGrid border="2" columns="1" id="raporContent">
+
+					<h:panelGrid>
+						<h:outputLabel value="Dosya Transfer ve İşleme "></h:outputLabel>
+						<br />
+						<br />
+						<h:outputLabel value="İşlem Tarihi"></h:outputLabel>
+						<p:calendar id="islemTarih" value="#{islemController.islemTarihi}"></p:calendar>
+						
+						<h:outputLabel value="Geriye Dönük Kaç Günlük Dosyalar Alınsın"></h:outputLabel>
+						<p:inputText id="backDay" value="#{islemController.backDay}"></p:inputText>
+						
+						
+						<h:outputLabel value="Şube"></h:outputLabel>
+						<p:selectOneMenu value="#{islemController.subeId}">
+							<f:selectItems value="#{islemController.subeList}" />
+						</p:selectOneMenu>
+
+
+						<p:commandButton value="Dosya Taşı ve İşle"
+							actionListener="#{islemController.processFile(null)}" id="subRaporBtn"
+							update="growl">
+						</p:commandButton>
+						
+						<p:commandButton value="Bütün Şubelerdeki Dosyaları Taşı"
+							actionListener="#{islemController.collectAllSube}" id="subRaporBtn1"
+							update="growl">
+						</p:commandButton>
+						
+						<p:commandButton value="Alınmış Bütün Dosyaları İşle"
+							actionListener="#{islemController.processAllFiles}" id="subRaporBtn2"
+							update="growl">
+						</p:commandButton>
+
+
+						<p:growl id="growl" showDetail="true" sticky="true" />
+
+
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+
+
+					</h:panelGrid>
+
+
+				</h:panelGrid>
+
+
+
+				<p:dialog widgetVar="dlgWait" modal="true" id="dlgWait"
+					closable="false">
+					<p:graphicImage value="/images/InProgress.gif"></p:graphicImage>
+				</p:dialog>
+
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+
+</f:view>
