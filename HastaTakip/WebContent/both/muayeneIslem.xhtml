@@ -1,0 +1,178 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:hal="http://java.sun.com/jsf/composite/composite"
+	contentType="text/html">
+
+	<ui:composition template="/template/commonLayout.xhtml">
+		<ui:define name="content">
+
+			<h:head>
+
+			</h:head>
+
+			<h:form>
+				<p:growl id="messages" showDetail="true" />
+
+				<h:panelGrid columnClasses="value">
+					<h3 style="margin-top: 0">Muayene Girişi</h3>
+					<p:schedule id="schedule" value="#{muayeneController.eventModel}"
+						widgetVar="myschedule" timeZone="GMT+2" locale="tr"
+						view="agendaDay">
+
+
+						<p:ajax event="eventSelect"
+							listener="#{muayeneController.onEventSelect}"
+							update="eventDetails" oncomplete="PF('eventDialog').show();" />
+
+
+					</p:schedule>
+
+
+				</h:panelGrid>
+
+				<p:dialog widgetVar="eventDialog" header="Muayene Bilgileri"
+					showEffect="clip" hideEffect="clip">
+					<h:panelGrid id="eventDetails">
+
+						<p:row>
+							<p:column colspan="5"></p:column>
+						</p:row>
+
+
+						<p:row>
+							<p:column colspan="5">
+								<h:outputLabel value="Hasta:    "></h:outputLabel>
+								<h:outputLabel
+									value="#{muayeneController.randevu.hasta.adSoyad}"></h:outputLabel>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column colspan="2">
+								<h:outputLabel value="Muayene Tipi:   "></h:outputLabel>
+
+							</p:column>
+							<p:column colspan="3">
+							<p:selectOneMenu value="#{muayeneController.mtId}" filter="true">
+								<p:ajax listener="#{muayeneController.onMuayeneTipiChange}"
+									update="matList" />
+								<f:selectItems value="#{muayeneController.allMuayeneTipiList}"
+									var="mt" itemValue="#{mt.id}" itemLabel="#{mt.adi}" />
+							</p:selectOneMenu>
+
+
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column colspan="2">
+								<h:outputLabel value="Muayene Alt Tipi:   "></h:outputLabel>
+							</p:column>
+							<p:column colspan="3">
+								<p:selectOneMenu value="#{muayeneController.matId}" id="matList"
+									filter="true">
+									<f:selectItems value="#{muayeneController.muayeneAltTipiList}"
+										var="mat" itemValue="#{mat.id}" itemLabel="#{mat.adi}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+
+
+
+						<p:row>
+							<p:column colspan="1">
+								<h:outputLabel value="Adi:  "></h:outputLabel>
+							</p:column>
+							<p:column colspan="1">
+
+								<p:selectOneMenu value="#{muayeneController.bilgiId}"
+									filter="true">
+									<f:selectItems
+										value="#{muayeneController.allMuayeneBilgileriList}" var="bl"
+										itemValue="#{bl.id}" itemLabel="#{bl.adi}" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column colspan="1">
+								<h:outputLabel value="Değeri:  "></h:outputLabel>
+							</p:column>
+							<p:column colspan="1">
+								<p:inputText id="randevuBilgiDegeri"
+									value="#{muayeneController.randevuBilgiDegeri}" />
+							</p:column>
+							<p:column colspan="1">
+								<p:commandButton id="addBilgi" value="Ekle"
+									actionListener="#{muayeneController.addBilgi}"
+									update="eventDetails" oncomplete="PF('myschedule').update();" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column colspan="5">
+								<p:dataTable var="eb" tableStyle="width:auto"
+									value="#{muayeneController.eklenecekBilgiler}">
+									<p:column headerText="Id">
+										<h:outputText value="#{eb.mb.adi}" />
+									</p:column>
+
+									<p:column headerText="Değer">
+										<h:outputText value="#{eb.deger}" />
+									</p:column>
+								</p:dataTable>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column colspan="5">
+								<h:outputLabel value="Ücreti:    "></h:outputLabel>
+								<p:inputText id="ucreti"
+									value="#{muayeneController.randevu.ucreti}" />
+							</p:column>
+						</p:row>
+
+						<p:commandButton id="updateButton"
+							value="Muayene Bilgilerini Kaydet ve Kapat"
+							actionListener="#{muayeneController.updateEvent}"
+							oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+					</h:panelGrid>
+				</p:dialog>
+			</h:form>
+
+			<script type="text/javascript">
+				PrimeFaces.locales['tr'] = {
+					closeText : 'kapat',
+					prevText : 'geri',
+					nextText : 'ileri',
+					currentText : 'bugün',
+					monthNames : [ 'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs',
+							'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim',
+							'Kasım', 'Aralık' ],
+					monthNamesShort : [ 'Oca', 'Şub', 'Mar', 'Nis', 'May',
+							'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara' ],
+					dayNames : [ 'Pazar', 'Pazartesi', 'Salı', 'Çarşamba',
+							'Perşembe', 'Cuma', 'Cumartesi' ],
+					dayNamesShort : [ 'Pz', 'Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct' ],
+					dayNamesMin : [ 'Pz', 'Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct' ],
+					weekHeader : 'Hf',
+					firstDay : 1,
+					isRTL : false,
+					showMonthAfterYear : false,
+					yearSuffix : '',
+					month : 'Ay',
+					week : 'Hafta',
+					day : 'Gün',
+					allDayText : 'Tüm Gün'
+				};
+			</script>
+			<style type="text/css">
+.value {
+	width: 1000px;
+}
+</style>
+
+		</ui:define>
+	</ui:composition>
+
+</f:view>
