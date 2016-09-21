@@ -19,6 +19,9 @@ public class Randevu {
 	@ManyToOne
 	private Hasta hasta;
 	
+	@ManyToOne
+	private MuayeneAltTipi mat;
+	
 	private Date baslangicTarihi;
 	private Date bitisTarihi;
 
@@ -74,6 +77,16 @@ public class Randevu {
 		this.ucreti = ucreti;
 	}
 
+	public MuayeneAltTipi getMat() {
+		return mat;
+	}
+
+	public void setMat(MuayeneAltTipi mat) {
+		this.mat = mat;
+	}
+
+	
+	
 	
 
 }
