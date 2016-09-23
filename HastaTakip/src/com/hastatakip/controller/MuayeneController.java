@@ -63,6 +63,8 @@ public class MuayeneController {
 
 	private List<MuayeneAltTipi> muayeneAltTipiList;
 
+	private List<Randevu> eskiRandevular;
+
 	public List<MuayeneAltTipi> getMuayeneAltTipiList() {
 		return muayeneAltTipiList;
 	}
@@ -109,6 +111,14 @@ public class MuayeneController {
 
 	public void setBilgiId(String bilgiId) {
 		this.bilgiId = bilgiId;
+	}
+
+	public List<Randevu> getEskiRandevular() {
+		return eskiRandevular;
+	}
+
+	public void setEskiRandevular(List<Randevu> eskiRandevular) {
+		this.eskiRandevular = eskiRandevular;
 	}
 
 	public List<MuayeneBilgileri> getAllMuayeneBilgileriList() {
@@ -248,6 +258,10 @@ public class MuayeneController {
 		event = (DefaultScheduleEvent) selectEvent.getObject();
 		randevu = (Randevu) event.getData();
 
+		eskiRandevular = randevuDao.getHastaRandevulars(randevu.getHasta());
+		System.out.println("fdf");
+		
+		eskiRandevular.size();
 	}
 
 	private void addMessage(FacesMessage message) {

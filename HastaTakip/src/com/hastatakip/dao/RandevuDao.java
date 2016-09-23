@@ -27,11 +27,18 @@ public class RandevuDao {
 				.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List getHastaRandevulars(Hasta hasta) {
+		return entityManager.createQuery(
+				"select s from Randevu s where s.hasta.dosyaNo="
+						+ hasta.getDosyaNo()).getResultList();
+	}
+
 	public Randevu insert(Randevu h) {
 		return entityManager.merge(h);
 
 	}
-	
+
 	public boolean delete(Randevu ran) {
 
 		try {
@@ -49,7 +56,6 @@ public class RandevuDao {
 		}
 
 	}
-
 
 	public boolean deleteHastaRandevus(Hasta has) {
 		try {

@@ -99,7 +99,7 @@ public class RandevuController {
 			DefaultScheduleEvent ds = new DefaultScheduleEvent(ran.getHasta()
 					.getAdSoyad(), ran.getBaslangicTarihi(),
 					ran.getBitisTarihi(), ran);
-			
+
 			ds.setId(String.valueOf(ran.getId()));
 
 			eventModel.addEvent(ds);
@@ -159,12 +159,9 @@ public class RandevuController {
 			newRand.setBitisTarihi(event.getEndDate());
 			newRand.setHasta(hastaDao.getHasta(hastaDosyaNo));
 
-			
-
 			Randevu reRand = randevuDao.insert(newRand);
-			
+
 			eventModel.addEvent(event);
-			
 
 		} else {
 			eventModel.updateEvent(event);
@@ -172,14 +169,17 @@ public class RandevuController {
 
 		event = new DefaultScheduleEvent();
 	}
-	
-	
+
 	public void deleteEvent(ActionEvent actionEvent) {
 		if (event.getData() != null) {
-			randevuDao.delete((Randevu) event.getData());
+			boolean res = randevuDao.delete((Randevu) event.getData());
 			eventModel.deleteEvent(event);
-		} 
-		event = new DefaultScheduleEvent();
+			event = new DefaultScheduleEvent();
+			FacesMessage message = new FacesMessage("Randevu Silindi.");
+			addMessage(message);
+
+		}
+
 	}
 
 	public void onEventSelect(SelectEvent selectEvent) {
@@ -188,41 +188,56 @@ public class RandevuController {
 	}
 
 	public void onDateSelect(SelectEvent selectEvent) {
-		
+
 		Date baslangicTarihi = (Date) selectEvent.getObject();
 		Date bitisTarihi = (Date) baslangicTarihi.clone();
-		
-		bitisTarihi.setMinutes(bitisTarihi.getMinutes()+30);
-		
-		event = new DefaultScheduleEvent("", baslangicTarihi,
-				bitisTarihi,new Randevu());
+
+		bitisTarihi.setMinutes(bitisTarihi.getMinutes() + 30);
+
+		event = new DefaultScheduleEvent("", baslangicTarihi, bitisTarihi,
+				new Randevu());
 	}
 
 	public void onEventMove(ScheduleEntryMoveEvent event) {
-		
-		if (event.getScheduleEvent().getData() != null ){
+
+		if (event.getScheduleEvent().getData() != null) {
 			Randevu ran = (Randevu) event.getScheduleEvent().getData();
-			
+
 			ran.setBaslangicTarihi(event.getScheduleEvent().getStartDate());
 			ran.setBitisTarihi(event.getScheduleEvent().getEndDate());
 			randevuDao.merge(ran);
-			FacesMessage message = new FacesMessage("Randevu Yeni Saati Güncellendi.");
+			FacesMessage message = new FacesMessage(
+					"Randevu Yeni Saati Güncellendi.");
 			addMessage(message);
 
-		}else{
-			FacesMessage message = new FacesMessage("Randevu Yeni Saati Güncellendi.");
+		} else {
+			FacesMessage message = new FacesMessage(
+					"Randevu Yeni Saati Güncellendi.");
 			addMessage(message);
 
 		}
-		
-			}
+
+	}
 
 	public void onEventResize(ScheduleEntryResizeEvent event) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"Event resized", "Day delta:" + event.getDayDelta()
-						+ ", Minute delta:" + event.getMinuteDelta());
 
-		addMessage(message);
+		if (event.getScheduleEvent().getData() != null) {
+			Randevu ran = (Randevu) event.getScheduleEvent().getData();
+
+			ran.setBaslangicTarihi(event.getScheduleEvent().getStartDate());
+			ran.setBitisTarihi(event.getScheduleEvent().getEndDate());
+			randevuDao.merge(ran);
+			FacesMessage message = new FacesMessage(
+					"Randevu Yeni Saati Güncellendi.");
+			addMessage(message);
+
+		} else {
+			FacesMessage message = new FacesMessage(
+					"Randevu Yeni Saati Güncellendi.");
+			addMessage(message);
+
+		}
+
 	}
 
 	private void addMessage(FacesMessage message) {

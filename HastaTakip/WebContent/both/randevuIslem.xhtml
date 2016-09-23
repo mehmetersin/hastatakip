@@ -19,7 +19,7 @@
 				<h:panelGrid columnClasses="value">
 					<h3 style="margin-top: 0"> - Randevu Planı -</h3>
 					<p:schedule id="schedule" value="#{randevuController.eventModel}"
-						widgetVar="myschedule" timeZone="GMT+2" locale="tr">
+						widgetVar="myschedule" timeZone="GMT+2" locale="tr" view="agendaWeek">
 
 						<p:ajax event="dateSelect"
 							listener="#{randevuController.onDateSelect}"
@@ -37,15 +37,15 @@
 
 				</h:panelGrid>
 
-				<p:dialog widgetVar="eventDialog" header="Event Details"
+				<p:dialog widgetVar="eventDialog" header="Muayene Bilgileri"
 					showEffect="clip" hideEffect="clip">
 					<h:panelGrid id="eventDetails" columns="2">
 
 
 						<h:outputLabel value="Hasta"></h:outputLabel>
 
-						<p:selectOneMenu value="#{randevuController.hastaDosyaNo}">
-							<f:selectItems value="#{randevuController.allHastaList}" var="bl"
+						<p:selectOneMenu value="#{randevuController.hastaDosyaNo}" filter="true">
+							<f:selectItems value="#{randevuController.allHastaList}" var="bl" 
 								itemValue="#{bl.dosyaNo}" itemLabel="#{bl.adSoyad}" />
 						</p:selectOneMenu>
 
@@ -58,7 +58,6 @@
 						<p:calendar id="to" value="#{randevuController.event.endDate}"
 							timeZone="GMT+2" pattern="dd/MM/yyyy HH:mm" />
 
-						<p:commandButton type="reset" value="Reset" />
 						<p:commandButton id="addButton" value="Kaydet"
 							actionListener="#{randevuController.addEvent}"
 							oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />

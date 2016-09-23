@@ -15,103 +15,49 @@
 
 			<h:form id="form"
 				styleClass="paddngLeft15 fnt20 center paddngRight5 paddngBottom20">
-				<p:messages style="margin-bottom:30px;" id="mesaj" closable="true"
+				<p:messages style="margin-bottom:70px;" id="mesaj" closable="true"
 					showDetail="true" showIcon="true"></p:messages>
+
+				<div style="background-color: lightblue;">
+					<h1 align="center">Kemal Hükmen Hasta Takip Sistemi</h1>
+				</div>
+
 				<h:panelGrid columns="1" layout="grid">
-					<h:panelGrid columns="1">
+					<h:panelGrid columns="2">
 
-						<p:commandButton style="width:400px;" value="İşlemler"
-							disabled="true">
-						</p:commandButton>
-						<p:commandButton style="width:400px;"
-							value="Şubeden Dosya Al ve İşleme"
-							action="#{islemController.goToPage()}">
-						</p:commandButton>
-						
-						<p:commandButton style="width:400px;"
-							value="Randevu Aç"
-							action="#{randevuController.goToPage()}">
-						</p:commandButton>
-						
-						<p:commandButton style="width:400px;"
-							value="Muayene Girişi"
-							action="#{muayeneController.goToPage()}">
-						</p:commandButton>
-						
-						<p:commandButton style="width:400px;" value="Kullanıcı İşlemleri"
-							action="#{userController.goToPage()}"
-							disabled="#{userController.isNormalUser()}">
-						</p:commandButton>
 
-						<p:commandButton style="width:400px;" value="Şube İşlemleri"
-							action="#{subeController.goToPage()}"
-							disabled="#{userController.isNormalUser()}">
-						</p:commandButton>
-						
-						<p:commandButton style="width:400px;" value="Hasta İşlemleri"
+						<p:commandButton style="width:400px;height:300px;"
+							value="Hasta Kayıt İşlemleri"
 							action="#{hastaController.goToPage()}"
 							disabled="#{userController.isNormalUser()}">
 						</p:commandButton>
 
 
-						<p:commandButton style="width:400px;" value="Bölge İşlemleri"
-							action="#{bolgeController.goToPage()}"
+						<p:commandButton style="width:400px;height:300px;"
+							value="Randevu Aç" action="#{randevuController.goToPage()}">
+						</p:commandButton>
+
+						<p:commandButton style="width:400px;height:300px;"
+							value="Muayene Girişi" action="#{muayeneController.goToPage()}">
+						</p:commandButton>
+
+						<p:commandButton style="width:400px;height:300px;"
+							value="Kullanıcı İşlemleri" action="#{userController.goToPage()}"
 							disabled="#{userController.isNormalUser()}">
 						</p:commandButton>
 
-					</h:panelGrid>
-				</h:panelGrid>
 
-				<h:panelGrid columns="1" layout="grid">
-					<h:panelGrid columns="1">
 
-						<p:commandButton style="width:400px;" value="Raporlar"
-							disabled="true">
-						</p:commandButton>
+
+
+
 
 					</h:panelGrid>
 				</h:panelGrid>
 
 
-				<h:panelGrid columns="1">
-					<h:panelGrid columns="1">
 
 
-
-						<p:commandButton style="width:400px;"
-							value="Şube Bazında Özet ve Detay Rapor"
-							action="#{raporController.goToRapor(1)}">
-						</p:commandButton>
-
-						<p:commandButton style="width:400px;"
-							value="Kasa Bazında Özet ve Detay Rapor"
-							action="#{raporController.goToRapor(2)}">
-						</p:commandButton>
-
-						<p:commandButton style="width:400px;"
-							value="Kasiyer Bazında Özet ve Detay Rapor"
-							action="#{raporController.goToRapor(3)}">
-						</p:commandButton>
-
-
-
-						<p:commandButton style="width:400px;"
-							value="Dosya İşlemleri Rapor"
-							action="#{raporController.goToRapor(5)}">
-						</p:commandButton>
-						
-							<p:commandButton style="width:400px;"
-							value="Fiyat Gör Rapor"
-							action="#{raporController.goToRapor(6)}">
-						</p:commandButton>
-
-					<p:commandButton style="width:400px;"
-							value="Şube Detay Raporu (New)"
-							action="#{raporController.goToRapor(7)}">
-						</p:commandButton>
-
-					</h:panelGrid>
-				</h:panelGrid>
 
 
 

@@ -37,12 +37,12 @@ body {
 }
 
 #login_area h1 {
-	width: 400px;
-	height: 50px;
+	width: 100px;
+	height: 40px;
 	color: #8f5a0a;
 	font-size: 2em;
 	letter-spacing: 2px;
-	margin: 0 0 20px;
+	margin: 0 0 10px;
 	position: relative;
 	text-align: center;
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
@@ -193,10 +193,6 @@ fieldset {
 	margin-left: 15px;
 }
 
-.carrefourLogo {
-	background-image: url("images/logo.jpeg") !important;
-}
-
 #forgotPassword {
 	margin-top: 25px;
 	margin-left: 15px;
@@ -206,24 +202,31 @@ fieldset {
 	{
 	color: #3050CE;
 }
+
+
+
 </style>
 	<form name="loginForm" method="POST" action="j_security_check">
+
+<div style="background-color: lightblue;" >
+   <h1 align="center">Kemal Hükmen Hasta Takip Sistemi</h1>
+</div>
 		<div id="login_area">
 
-			<h:panelGroup
-				rendered="#{requestScope['javax.servlet.forward.servlet_path'] == '/j_security_check'}">
-				<div
-					style="width: 350px; height: 25px; text-align: center; color: #B61212; margin-top: 15px; float: left; font-size: 15px;">
-					<div>Kullanıcı adı veya şifre hatalı! Lütfen kontrol ediniz!</div>
-				</div>
-			</h:panelGroup>
-			<div style="margin-top: 110px;">
+			<div style="margin-top: 40px; height: 482px; width: 383px">
 				<fieldset id="inputs">
 					<label>Kullanıcı Adı</label> <input id="username" type="text"
 						name="j_username" placeholder="Kullanıcı adı" /><br /> <label>Şifre</label>
 					<input id="password" type="password" name="j_password"
 						placeholder="Şifre" /><br />
 				</fieldset>
+				<h:panelGroup
+					rendered="#{requestScope['javax.servlet.forward.servlet_path'] == '/j_security_check'}">
+					<div
+						style="width: 350px; height: 15px; text-align: center; color: #B61212; margin-top: 15px; float: left; font-size: 15px;">
+						<div>Kullanıcı adı veya şifre hatalı! Lütfen kontrol ediniz!</div>
+					</div>
+				</h:panelGroup>
 				<div class="w325 mgrLft15">
 					<div class="left">
 						<input id="submit" type="submit" value="Giriş" name="submit" />
@@ -239,22 +242,6 @@ fieldset {
 		</div>
 
 
-		<!-- div
-			style="position: relative; left: 200px; top: 200px; width: 300px; border: 1px solid #000000;">
-			<table>
-				<tr>
-					<td><p>Kullanıcı Adı</p></td>
-					<td><input type="text" name="j_username" /></td>
-				</tr>
-				<tr>
-					<td><p>Şifre</p></td>
-					<td><input type="password" name="j_password" /></td>
-				</tr>
-				<tr>
-					<td><input type="submit" value="Giriş" /></td>
-					<td><input type="reset" value="Temizle" /></td>
-				</tr>
-			</table>
-		</div -->
+
 	</form>
 </f:view>
