@@ -45,6 +45,11 @@
 							value="Kullanıcı İşlemleri" action="#{userController.goToPage()}"
 							disabled="#{userController.isNormalUser()}">
 						</p:commandButton>
+						
+						<p:commandButton style="width:400px;height:300px;"
+							value="Muhasebe İşlemleri" action="#{muhasebeController.goToPage()}"
+							disabled="#{userController.isNormalUser()}">
+						</p:commandButton>
 
 
 
