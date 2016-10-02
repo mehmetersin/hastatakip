@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:hal="http://java.sun.com/jsf/composite/composite"
+	contentType="text/html">
+
+	<ui:composition template="/template/commonLayout.xhtml">
+		<ui:define name="content">
+
+			<h:head>
+				<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+			</h:head>
+
+			<f:event listener="#{userController.adminControl}"
+				type="preRenderView" />
+
+			<h:form id="form"
+				styleClass="paddngLeft15 fnt20 center paddngRight20 paddngBottom20">
+				<p:messages style="margin-bottom:20px;" id="mesaj" closable="true"
+					showDetail="true" showIcon="true"></p:messages>
+				<h:panelGrid border="0" columns="1" id="raporContent">
+
+					<h:outputLabel value="Muhasebe İşlemleri"></h:outputLabel>
+					<br/>
+					<h:panelGrid columns="4" layout="grid">
+					
+						
+									<h:outputLabel value="Hasta:    "></h:outputLabel>
+									<p:selectOneMenu value="#{muhasebeController.hastaDosyaNo}" filter="true">
+							<f:selectItems value="#{muhasebeController.allHastaList}" var="bl"
+								itemValue="#{bl.dosyaNo}" itemLabel="#{bl.adSoyad}" />
+							</p:selectOneMenu>
+
+						<h:outputLabel value="Yapılan İşlem: "></h:outputLabel>
+						<p:inputText id="name"  value="#{muhasebeController.mb.islemGirisi}"></p:inputText>
+					
+						
+						<h:outputLabel value="İşlem Tarihi:  "></h:outputLabel>
+						<p:calendar id="islemTarihi" pattern="dd/MM/yyyy"  yearRange="c-100:c-17"
+						
+							value="#{muhasebeController.mb.islemTarihi}"> <f:convertDateTime pattern="dd/MM/yyyy" /></p:calendar>
+							
+						
+							
+						
+								<h:outputLabel value="Ücreti:    ">  </h:outputLabel>
+								<p:inputText id="ucreti"
+									value="#{muhasebeController.mb.ucreti}" />
+									
+									
+							
+							
+							
+						
+
+						<p:commandButton value="Bilgileri Kaydet"
+							actionListener="#{muhasebeController.addMuhasebeBilgileri}" ajax="false"
+							id="hasRaporBtn" update="growl,:form:muhasebeBilgileriList">
+						</p:commandButton>
+
+
+						<p:growl id="growl" showDetail="true" sticky="true" />
+
+
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+
+
+					</h:panelGrid>
+
+
+				</h:panelGrid>
+
+
+	<p:dataTable var="sb" value="#{muhasebeController.allMuhasebeBilgileri}"
+	filteredValue="#{muhasebeController.filteredAllMuhasebeBilgileri}"
+	widgetVar="muhasebeTable" 
+					paginator="true" rows="10"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15" paginatorPosition="top"
+					editable="true" id="muhasebeBilgileriList">
+
+					<f:facet name="header">
+        			    - Muhasebe Bilgileri Listesi -
+      		 		</f:facet>
+
+					<p:ajax event="rowEdit" listener="#{muhasebeController.onRowEdit}"
+						update=":form:growl,:form:muhasebeBilgileriList" />
+					<p:ajax event="rowEditCancel"
+						listener="#{muhasebeController.onRowCancel}"
+						update=":form:growl,:form:muhasebeBilgileriList" />
+
+					<p:column exportable="false" headerText="Düzelt-Sil" style="width:80px" >
+						<p:rowEditor />
+
+					</p:column>
+					
+
+		   <p:column filterBy="#{sb.hasta.adSoyad}" headerText="Hasta Adı Soyadı"  filterMatchMode="exact" 
+		   style="width:150px">
+            <f:facet name="filter">
+                <p:selectOneMenu onchange="PF('muhasebeTable').filter()" filter="true">
+                    <f:selectItem itemLabel="Hasta Seç" itemValue="#{null}" noSelectionOption="true" />
+                    <f:selectItems value="#{muhasebeController.allHastaList}" var="bl"
+								itemValue="#{bl.adSoyad}" itemLabel="#{bl.adSoyad}" />
+                </p:selectOneMenu>
+            </f:facet>
+            <h:outputText value="#{sb.hasta.adSoyad}" />
+        </p:column>
+					
+<!-- 					<p:column style="width:150px" sortBy="#{sb.islemTarihi}" filterBy="#{sb.islemTarihi}" filterMatchMode="contains" headerText="İşlem Tarihi"> -->
+<!--                     <f:facet name="filter"> -->
+<!--                         <p:calendar pattern="yyyy-MM-dd"  yearRange="c-100:c-17" onkeyup="PF('muhasebeTable').filter()"> -->
+<!--                             <p:ajax event="dateSelect" listener="#{muhasebeController.handleDateSelect}"/> -->
+<!--                         </p:calendar> -->
+<!--                     </f:facet> -->
+<!--                     <h:outputText value="#{sb.islemTarihi}"> -->
+<!--                     </h:outputText> -->
+<!--                 </p:column> -->
+
+
+					<p:column headerText="Yapılan İşlem" style="width:150px"
+						filterBy="#{sb.islemGirisi}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.islemGirisi}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.islemGirisi}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+
+					<p:column headerText="Alınan Ücret" style="width:150px"
+						filterBy="#{sb.ucreti}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.ucreti}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.ucreti}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					
+
+					<p:column headerText="İşlem Tarihi" style="width:150px"
+						filterBy="#{sb.islemTarihi}">
+						<p:cellEditor>
+						
+							<f:facet name="output">
+								<h:outputText value="#{sb.islemTarihi}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:calendar value="#{sb.islemTarihi}" style="width:100%"></p:calendar>
+							</f:facet> 
+						</p:cellEditor>
+					</p:column>
+
+				
+					
+					
+
+
+
+					
+
+				</p:dataTable>
+	
+		
+
+				<p:dialog widgetVar="dlgWait" modal="true" id="dlgWait"
+					closable="false">
+					<p:graphicImage value="/images/InProgress.gif"></p:graphicImage>
+				</p:dialog>
+
+				<h:commandLink>
+					<img src="../images/excel.png" alt="Excel" height="42" width="42">
+					</img>
+
+					<p:dataExporter type="xls" target="muhasebeBilgileriList"
+						fileName="muhasebeBilgileri" pageOnly="false" />
+				</h:commandLink>
+
+			</h:form>
+			
+			
+
+		</ui:define>
+	</ui:composition>
+
+</f:view>
