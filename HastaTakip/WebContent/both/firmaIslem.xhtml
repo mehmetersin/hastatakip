@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:hal="http://java.sun.com/jsf/composite/composite"
+	contentType="text/html">
+
+	<ui:composition template="/template/commonLayout.xhtml">
+		<ui:define name="content">
+
+			<h:head>
+				<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+			</h:head>
+
+			<f:event listener="#{userController.adminControl}"
+				type="preRenderView" />
+
+			<h:form id="form"
+				styleClass="paddngLeft15 fnt20 center paddngRight20 paddngBottom20">
+				<p:messages style="margin-bottom:20px;" id="mesaj" closable="true"
+					showDetail="true" showIcon="true"></p:messages>
+				<h:panelGrid border="0" columns="1" id="raporContent">
+
+					<h:outputLabel value="Firma İşlemleri"></h:outputLabel>
+					<br/>
+					<h:panelGrid columns="2" layout="grid">
+					
+						
+								
+
+						<h:outputLabel value="Firma Adı: "></h:outputLabel>
+						<p:inputText id="firmaAdi"  value="#{firmaController.fb.firmaAdi}"></p:inputText>
+						
+						<h:outputLabel value="Firma Telefonu: "></h:outputLabel>
+						<p:inputMask id="firmaTel"  mask="(999) 999-9999" value="#{firmaController.fb.firmaTel}"></p:inputMask>
+					
+						<h:outputLabel value="Firma Adresi: "></h:outputLabel>
+						<p:inputTextarea rows="3" cols="33" id="firmaAdresi"
+							value="#{firmaController.fb.firmaAdres}"></p:inputTextarea>
+						
+						
+						
+				
+
+						<p:commandButton value="Bilgileri Kaydet"
+							actionListener="#{firmaController.addFirmaBilgileri}" ajax="false"
+							id="hasRaporBtn" update="growl,:form:firmaBilgileriList">
+						</p:commandButton>
+
+
+						<p:growl id="growl" showDetail="true" sticky="true" />
+
+
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+
+
+					</h:panelGrid>
+
+
+				</h:panelGrid>
+				
+				
+				<p:dataTable var="sb" value="#{firmaController.allFirmaBilgileri}"
+	filteredValue="#{firmaController.filteredAllFirmaBilgileri}"
+	widgetVar="firmaTable" 
+					paginator="true" rows="10"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15" paginatorPosition="top"
+					editable="true" id="firmaBilgileriList">
+
+					<f:facet name="header">
+        			    - Firma Bilgileri Listesi -
+      		 		</f:facet>
+
+					<p:ajax event="rowEdit" listener="#{firmaController.onRowEdit}"
+						update=":form:growl,:form:firmaBilgileriList" />
+					<p:ajax event="rowEditCancel"
+						listener="#{firmaController.onRowCancel}"
+						update=":form:growl,:form:firmaBilgileriList" />
+
+					<p:column exportable="false" headerText="Düzelt-Sil" style="width:80px" >
+						<p:rowEditor />
+
+					</p:column>
+					
+
+			
+					<p:column filterBy="#{sb.firmaAdi}" headerText="Firma Adı"  filterMatchMode="exact" 
+		   style="width:150px">
+            <f:facet name="filter">
+                	<p:selectOneMenu onchange="PF('firmaTable').filter()" filter="true">
+                    <f:selectItem itemLabel="Firma Seç" itemValue="#{null}" noSelectionOption="true" />
+                    <f:selectItems value="#{firmaController.allFirmaBilgileri}" var="bl"
+								itemValue="#{bl.firmaAdi}" itemLabel="#{bl.firmaAdi}" />
+                </p:selectOneMenu>
+            </f:facet>
+            
+            <h:outputText value="#{sb.firmaAdi}" />
+        </p:column>
+
+
+					<p:column headerText="Firma Adresi" style="width:300px"
+						filterBy="#{sb.firmaAdres}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.firmaAdres}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.firmaAdres}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					
+					
+						<p:column headerText="Firma Telefonu" style="width:150px"
+						filterBy="#{sb.firmaTel}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.firmaTel}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.firmaTel}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					
+
+		
+								
+
+				</p:dataTable>
+
+
+				<p:dialog widgetVar="dlgWait" modal="true" id="dlgWait"
+					closable="false">
+					<p:graphicImage value="/images/InProgress.gif"></p:graphicImage>
+				</p:dialog>
+
+				<h:commandLink>
+					<img src="../images/excel.png" alt="Excel" height="42" width="42">
+					</img>
+
+					<p:dataExporter type="xls" target="firmaBilgileriList"
+						fileName="firmaBilgileri" pageOnly="false" />
+				</h:commandLink>
+
+			</h:form>
+			
+			
+
+		</ui:define>
+	</ui:composition>
+
+</f:view>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:hal="http://java.sun.com/jsf/composite/composite"
+	contentType="text/html">
+
+	<ui:composition template="/template/commonLayout.xhtml">
+		<ui:define name="content">
+
+			<h:head>
+				<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+			</h:head>
+
+			<f:event listener="#{userController.adminControl}"
+				type="preRenderView" />
+
+			<h:form id="form"
+				styleClass="paddngLeft15 fnt20 center paddngRight20 paddngBottom20">
+				<p:messages style="margin-bottom:20px;" id="mesaj" closable="true"
+					showDetail="true" showIcon="true"></p:messages>
+				<h:panelGrid border="0" columns="1" id="raporContent">
+
+					<h:outputLabel value="Malzeme Giriş İşlemleri"></h:outputLabel>
+					<br/>
+					<h:panelGrid columns="2" layout="grid">
+					
+						
+						<h:outputLabel value="Firma Adı:    "></h:outputLabel>
+					    <p:selectOneMenu value="#{malzemeController.firmaID}" filter="true">
+								<f:selectItems value="#{malzemeController.allFirmaList}" var="bl"
+								itemValue="#{bl.id}" itemLabel="#{bl.firmaAdi}" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Malzeme Adı: "></h:outputLabel>
+						<p:inputText id="malzemeAdi"  value="#{malzemeController.mgb.malzemeAdi}"></p:inputText>
+						
+						<h:outputLabel value="Malzeme Birimi: "></h:outputLabel>
+						<p:inputText id="malzemeBirimi"  value="#{malzemeController.mgb.malzemeBirimi}"></p:inputText>
+					
+						<p:outputLabel for="malzemeKarti" value="Malzeme Kartı:" />
+		        <p:selectOneRadio id="malzemeKarti" value="#{malzemeController.mgb.malzemeKarti}">
+		            <f:selectItem itemLabel="Sarf" itemValue="Sarf" />
+		            <f:selectItem itemLabel="İlaç" itemValue="İlaç" />
+		        </p:selectOneRadio>
+
+						<p:commandButton value="Bilgileri Kaydet"
+							actionListener="#{malzemeController.addMalzemeBilgileri}" ajax="false"
+							id="hasRaporBtn" update="growl,:form:malzemeBilgileriList">
+						</p:commandButton>
+
+
+						<p:growl id="growl" showDetail="true" sticky="true" />
+
+
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+
+
+					</h:panelGrid>
+
+
+				</h:panelGrid>
+				
+				
+				<p:dataTable var="sb" value="#{malzemeController.allMalzemeGirisBilgileri}"
+	filteredValue="#{malzemeController.filteredAllMalzemeGirisBilgileri}"
+	widgetVar="malzemeTable" 
+					paginator="true" rows="10"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15" paginatorPosition="top"
+					editable="true" id="malzemeBilgileriList">
+
+					<f:facet name="header">
+        			    - Malzeme Bilgileri Listesi -
+      		 		</f:facet>
+
+					<p:ajax event="rowEdit" listener="#{malzemeController.onRowEdit}"
+						update=":form:growl,:form:malzemeBilgileriList" />
+					<p:ajax event="rowEditCancel"
+						listener="#{malzemeController.onRowCancel}"
+						update=":form:growl,:form:malzemeBilgileriList" />
+
+					<p:column exportable="false" headerText="Düzelt-Sil" style="width:80px" >
+						<p:rowEditor />
+
+					</p:column>
+					
+
+			
+					<p:column filterBy="#{sb.malzemeAdi}" headerText="Malzeme Adı"  filterMatchMode="exact" 
+		   style="width:150px">
+            <f:facet name="filter">
+                	<p:selectOneMenu onchange="PF('malzemeTable').filter()" filter="true">
+                    <f:selectItem itemLabel="Malzeme Seç" itemValue="#{null}" noSelectionOption="true" />
+                    <f:selectItems value="#{malzemeController.allMalzemeGirisBilgileri}" var="bl"
+								itemValue="#{bl.malzemeAdi}" itemLabel="#{bl.malzemeAdi}" />
+                </p:selectOneMenu>
+            </f:facet>
+            
+            <h:outputText value="#{sb.malzemeAdi}" />
+        </p:column>
+
+					
+					
+						<p:column headerText="Malzeme Birimi" style="width:150px"
+						filterBy="#{sb.malzemeBirimi}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.malzemeBirimi}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.malzemeBirimi}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					
+					
+					<p:column headerText="Malzeme Kartı" style="width:150px"
+						filterBy="#{sb.malzemeKarti}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.malzemeKarti}" />
+							</f:facet>
+							<f:facet name="input">
+															<p:outputLabel for="malzemeKarti" value="" />
+					        <p:selectOneMenu id="malzemeKarti" value="#{sb.malzemeKarti}" style="width:125px">
+					            <f:selectItem itemLabel="Sarf" itemValue="Sarf" />
+					            <f:selectItem itemLabel="İlaç" itemValue="İlaç" />
+					        </p:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+
+					
+
+		
+								
+
+				</p:dataTable>
+
+
+				<p:dialog widgetVar="dlgWait" modal="true" id="dlgWait"
+					closable="false">
+					<p:graphicImage value="/images/InProgress.gif"></p:graphicImage>
+				</p:dialog>
+
+				<h:commandLink>
+					<img src="../images/excel.png" alt="Excel" height="42" width="42">
+					</img>
+
+					<p:dataExporter type="xls" target="malzemeBilgileriList"
+						fileName="malzemeBilgileri" pageOnly="false" />
+				</h:commandLink>
+
+			</h:form>
+			
+			
+
+		</ui:define>
+	</ui:composition>
+
+</f:view>

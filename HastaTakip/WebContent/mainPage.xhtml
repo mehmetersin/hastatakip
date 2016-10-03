@@ -50,6 +50,21 @@
 							value="Muhasebe İşlemleri" action="#{muhasebeController.goToPage()}"
 							disabled="#{userController.isNormalUser()}">
 						</p:commandButton>
+						
+						<p:commandButton style="width:400px;height:300px;"
+							value="Firma İşlemleri" action="#{firmaController.goToPage()}"
+							disabled="#{userController.isNormalUser()}">
+						</p:commandButton>
+						
+						<p:commandButton style="width:400px;height:300px;"
+							value="Malzeme Giriş İşlemleri" action="#{malzemeController.goToPage()}"
+							disabled="#{userController.isNormalUser()}">
+						</p:commandButton>
+						
+						<p:commandButton style="width:400px;height:300px;"
+							value="Depo İşlemleri" action="#{depoController.goToPage()}"
+							disabled="#{userController.isNormalUser()}">
+						</p:commandButton>
 
 
 

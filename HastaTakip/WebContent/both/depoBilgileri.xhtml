@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:hal="http://java.sun.com/jsf/composite/composite"
+	contentType="text/html">
+
+	<ui:composition template="/template/commonLayout.xhtml">
+		<ui:define name="content">
+
+			<h:head>
+				<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+			</h:head>
+
+			<f:event listener="#{userController.adminControl}"
+				type="preRenderView" />
+
+			<h:form id="form"
+				styleClass="paddngLeft15 fnt20 center paddngRight20 paddngBottom20">
+				<p:messages style="margin-bottom:20px;" id="mesaj" closable="true"
+					showDetail="true" showIcon="true"></p:messages>
+				<h:panelGrid border="0" columns="1" id="raporContent">
+
+					<h:outputLabel value="Muhasebe İşlemleri"></h:outputLabel>
+					<br/>
+					<h:panelGrid columns="2" layout="grid">
+					
+						
+									<h:outputLabel value="Firma Adı:    "></h:outputLabel>
+									<p:selectOneMenu value="#{depoController.firmaID}" filter="true">
+							<f:selectItems value="#{depoController.allFirmaList}" var="bl"
+								itemValue="#{bl.id}" itemLabel="#{bl.firmaAdi}" />
+							</p:selectOneMenu>
+							
+							<h:outputLabel value="Malzeme Adı:    "></h:outputLabel>
+									<p:selectOneMenu value="#{depoController.malzemeID}" filter="true">
+							<f:selectItems value="#{depoController.allMalzemeList}" var="bl"
+								itemValue="#{bl.id}" itemLabel="#{bl.malzemeAdi}" />
+							</p:selectOneMenu>
+
+						<h:outputLabel value="Giriş/Çıkış Miktarı: "></h:outputLabel>
+						<p:inputText id="name"  value="#{depoController.db.miktar}"></p:inputText>
+					
+						
+						<h:outputLabel value="İşlem Tarihi:  "></h:outputLabel>
+						<p:calendar id="islemTarihi" pattern="dd/MM/yyyy"  yearRange="c-100:c-17"
+						
+							value="#{depoController.db.islemTarihi}"> <f:convertDateTime pattern="dd/MM/yyyy" /></p:calendar>
+							
+						<p:outputLabel for="giriscikis" value="İşlem:" />
+		        <p:selectOneRadio id="giriscikis" value="#{depoController.db.giriscikis}">
+		            <f:selectItem itemLabel="Giriş" itemValue="Giriş" />
+		            <f:selectItem itemLabel="Çıkış" itemValue="Çıkış" />
+		        </p:selectOneRadio>
+							
+						
+							
+
+						<p:commandButton value="Bilgileri Kaydet"
+							actionListener="#{depoController.addDepoBilgileri}" ajax="false"
+							id="hasRaporBtn" update="growl,:form:depoBilgileriList">
+						</p:commandButton>
+
+
+						<p:growl id="growl" showDetail="true" sticky="true" />
+
+
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+
+
+					</h:panelGrid>
+
+
+				</h:panelGrid>
+
+
+	<p:dataTable var="sb" value="#{depoController.allDepoBilgileri}"
+	filteredValue="#{depoController.filteredAllDepoBilgileri}"
+	widgetVar="depoTable" 
+					paginator="true" rows="10"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15" paginatorPosition="top"
+					editable="true" id="depoBilgileriList">
+
+					<f:facet name="header">
+        			    - Depo Bilgileri Listesi -
+      		 		</f:facet>
+
+					<p:ajax event="rowEdit" listener="#{depoController.onRowEdit}"
+						update=":form:growl,:form:depoBilgileriList" />
+					<p:ajax event="rowEditCancel"
+						listener="#{depoController.onRowCancel}"
+						update=":form:growl,:form:depoBilgileriList" />
+
+					<p:column exportable="false" headerText="Düzelt-Sil" style="width:80px" >
+						<p:rowEditor />
+
+					</p:column>
+					
+
+		   <p:column filterBy="#{sb.firmaBilgileri.firmaAdi}" headerText="Firma Adı"  filterMatchMode="exact" 
+		   style="width:150px">
+            <f:facet name="filter">
+                <p:selectOneMenu onchange="PF('depoTable').filter()" filter="true">
+                    <f:selectItem itemLabel="Firma Seç" itemValue="#{null}" noSelectionOption="true" />
+                    <f:selectItems value="#{depoController.allFirmaList}" var="bl"
+								itemValue="#{bl.firmaAdi}" itemLabel="#{bl.firmaAdi}" />
+                </p:selectOneMenu>
+            </f:facet>
+            <h:outputText value="#{sb.firmaBilgileri.firmaAdi}" />
+        </p:column>
+        
+         <p:column filterBy="#{sb.malzemeBilgileri.malzemeAdi}" headerText="Malzeme Adı"  filterMatchMode="exact" 
+		   style="width:150px">
+            <f:facet name="filter">
+                <p:selectOneMenu onchange="PF('depoTable').filter()" filter="true">
+                    <f:selectItem itemLabel="Malzeme Seç" itemValue="#{null}" noSelectionOption="true" />
+                    <f:selectItems value="#{depoController.allMalzemeList}" var="bl"
+								itemValue="#{bl.malzemeAdi}" itemLabel="#{bl.malzemeAdi}" />
+                </p:selectOneMenu>
+            </f:facet>
+            <h:outputText value="#{sb.malzemeBilgileri.malzemeAdi}" />
+        </p:column>
+					
+
+
+					<p:column headerText="Giriş/Çıkış Miktarı:" style="width:150px"
+						filterBy="#{sb.miktar}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.miktar}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.miktar}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					
+					
+
+
+
+					
+
+					<p:column headerText="İşlem Tarihi" style="width:150px"
+						filterBy="#{sb.islemTarihi}">
+						<p:cellEditor>
+						
+							<f:facet name="output">
+								<h:outputText value="#{sb.islemTarihi}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:calendar value="#{sb.islemTarihi}" style="width:100%"></p:calendar>
+							</f:facet> 
+						</p:cellEditor>
+					</p:column>
+
+				
+					<p:column headerText="İşlem" style="width:150px"
+						filterBy="#{sb.giriscikis}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.giriscikis}" />
+							</f:facet>
+							<f:facet name="input">
+															<p:outputLabel for="giriscikis" value="" />
+					        <p:selectOneMenu id="giriscikis" value="#{sb.giriscikis}" style="width:125px">
+					            <f:selectItem itemLabel="Giriş" itemValue="Giriş" />
+					            <f:selectItem itemLabel="Çıkış" itemValue="Çıkış" />
+					        </p:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					
+
+					<p:column headerText="Stok Miktarı:" style="width:150px"
+						filterBy="#{sb.totalMiktar}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.totalMiktar}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.totalMiktar}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					
+
+				</p:dataTable>
+	
+		
+
+				<p:dialog widgetVar="dlgWait" modal="true" id="dlgWait"
+					closable="false">
+					<p:graphicImage value="/images/InProgress.gif"></p:graphicImage>
+				</p:dialog>
+
+				<h:commandLink>
+					<img src="../images/excel.png" alt="Excel" height="42" width="42">
+					</img>
+
+					<p:dataExporter type="xls" target="depoBilgileriList"
+						fileName="depoBilgileri" pageOnly="false" />
+				</h:commandLink>
+
+			</h:form>
+			
+			
+
+		</ui:define>
+	</ui:composition>
+
+</f:view>
