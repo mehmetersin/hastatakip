@@ -1,0 +1,8 @@
+INSERT INTO muayenetipi VALUES
+('01', N'JÝNEKOLOJÝ'),
+('02', N'NORMAL GEBELÝK'),
+('03', N'ÝNFERTÝLÝTE'),
+('04', N'MENOPOZ - OSTEOPOROZ'),
+('05', N'AÝLE PLANLAMASI'),
+('06', N'ONKOLOJÝ'),
+('07', N'UYARILAR')
