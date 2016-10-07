@@ -77,4 +77,10 @@ public class RandevuDao {
 		return entityManager.merge(ran);
 
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List getAllRandevus(int dosyaNo) {
+		return entityManager.createQuery("select s from Randevu s where s.hasta.dosyaNo=" + dosyaNo)
+				.getResultList();
+	}
 }

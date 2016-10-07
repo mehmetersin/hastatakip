@@ -33,14 +33,16 @@
 						
 									<h:outputLabel value="Firma Adı:    "></h:outputLabel>
 									<p:selectOneMenu value="#{depoController.firmaID}" filter="true">
+							<f:selectItem itemLabel="Firma Seç" itemValue="#{null}" noSelectionOption="true" />
 							<f:selectItems value="#{depoController.allFirmaList}" var="bl"
 								itemValue="#{bl.id}" itemLabel="#{bl.firmaAdi}" />
 							</p:selectOneMenu>
 							
 							<h:outputLabel value="Malzeme Adı:    "></h:outputLabel>
 									<p:selectOneMenu value="#{depoController.malzemeID}" filter="true">
+							<f:selectItem itemLabel="Malzeme Seç" itemValue="#{null}" noSelectionOption="true" />
 							<f:selectItems value="#{depoController.allMalzemeList}" var="bl"
-								itemValue="#{bl.id}" itemLabel="#{bl.malzemeAdi}" />
+								itemValue="#{bl.id}" itemLabel="#{bl.malzemeAdi} - #{bl.malzemeKarti}" />
 							</p:selectOneMenu>
 
 						<h:outputLabel value="Giriş/Çıkış Miktarı: "></h:outputLabel>
@@ -130,7 +132,20 @@
             <h:outputText value="#{sb.malzemeBilgileri.malzemeAdi}" />
         </p:column>
 					
-
+					
+					
+					<p:column headerText="Malzeme Kartı:" style="width:150px"
+						filterBy="#{sb.malzemeBilgileri.malzemeKarti}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.malzemeBilgileri.malzemeKarti}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sb.malzemeBilgileri.malzemeKarti}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					
 
 					<p:column headerText="Giriş/Çıkış Miktarı:" style="width:150px"
 						filterBy="#{sb.miktar}">
@@ -146,7 +161,21 @@
 					
 					
 
-
+					<p:column headerText="İşlem" style="width:150px"
+						filterBy="#{sb.giriscikis}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.giriscikis}" />
+							</f:facet>
+							<f:facet name="input">
+							<p:outputLabel for="giriscikis" value="" />
+					        <p:selectOneMenu id="giriscikis" value="#{sb.giriscikis}" style="width:125px">
+					            <f:selectItem itemLabel="Giriş" itemValue="Giriş" />
+					            <f:selectItem itemLabel="Çıkış" itemValue="Çıkış" />
+					        </p:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
 
 					
 
@@ -164,34 +193,20 @@
 					</p:column>
 
 				
-					<p:column headerText="İşlem" style="width:150px"
-						filterBy="#{sb.giriscikis}">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="#{sb.giriscikis}" />
-							</f:facet>
-							<f:facet name="input">
-															<p:outputLabel for="giriscikis" value="" />
-					        <p:selectOneMenu id="giriscikis" value="#{sb.giriscikis}" style="width:125px">
-					            <f:selectItem itemLabel="Giriş" itemValue="Giriş" />
-					            <f:selectItem itemLabel="Çıkış" itemValue="Çıkış" />
-					        </p:selectOneMenu>
-							</f:facet>
-						</p:cellEditor>
-					</p:column>
+					
 					
 
-					<p:column headerText="Stok Miktarı:" style="width:150px"
-						filterBy="#{sb.totalMiktar}">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="#{sb.totalMiktar}" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText value="#{sb.totalMiktar}" style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
-					</p:column>
+<!-- 					<p:column headerText="Stok Miktarı:" style="width:150px" -->
+<!-- 						filterBy="#{sb.totalMiktar}"> -->
+<!-- 						<p:cellEditor> -->
+<!-- 							<f:facet name="output"> -->
+<!-- 								<h:outputText value="#{sb.totalMiktar}" /> -->
+<!-- 							</f:facet> -->
+<!-- 							<f:facet name="input"> -->
+<!-- 								<p:inputText value="#{sb.totalMiktar}" style="width:100%" /> -->
+<!-- 							</f:facet> -->
+<!-- 						</p:cellEditor> -->
+<!-- 					</p:column> -->
 
 					
 

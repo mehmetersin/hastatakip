@@ -3,7 +3,9 @@ package com.hastatakip.model.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +23,7 @@ public class DepoBilgileri implements Serializable{
 	@Temporal(TemporalType.DATE)
 	private Date islemTarihi;
 	private String giriscikis;
-	private Integer totalMiktar;
+	
 	
 	
 	@ManyToOne
@@ -70,12 +72,7 @@ public class DepoBilgileri implements Serializable{
 	public void setMalzemeBilgileri(MalzemeGirisBilgileri malzemeBilgileri) {
 		this.malzemeBilgileri = malzemeBilgileri;
 	}
-	public Integer getTotalMiktar() {
-		return totalMiktar;
-	}
-	public void setTotalMiktar(Integer totalMiktar) {
-		this.totalMiktar = totalMiktar;
-	}
+
 
 	
 	

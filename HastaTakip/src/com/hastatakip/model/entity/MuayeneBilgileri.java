@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class MuayeneBilgileri {
@@ -12,6 +13,9 @@ public class MuayeneBilgileri {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Integer id;
 	private String adi;
+	
+	@ManyToOne
+	MuayeneAltTipi muayeneAltTipi;
 
 	public Integer getId() {
 		return id;

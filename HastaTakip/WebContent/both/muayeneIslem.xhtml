@@ -32,142 +32,155 @@
 
 
 				</h:panelGrid>
-
-				<p:dialog widgetVar="eventDialog" header="Muayene Bilgileri"
+				
+				<p:dialog id = "dialog" draggable = "true" minimizable="false" modal="true"  width="80%" height="400"
+				style="text-align:center" resizable="false" widgetVar="eventDialog" styleClass="autoWidthDialog" header="Muayene Bilgileri"
 					showEffect="clip" hideEffect="clip">
 					<h:panelGrid id="eventDetails">
-
-						<p:row>
-							<p:column colspan="5"></p:column>
-						</p:row>
-
-
-						<p:row>
-							<p:column colspan="5">
+					
+					<p:scrollPanel mode="native" style="width:100% !important; height:80% !important; text-align:center">
+					
+					<p:row>
+							<p:column colspan="20">
 								<h:outputLabel value="Hasta:    "></h:outputLabel>
 								<h:outputLabel
 									value="#{muayeneController.randevu.hasta.adSoyad}"></h:outputLabel>
 							</p:column>
-						</p:row>
-
-
-
-						<p:row>
-							<p:column colspan="1">
-								<h:outputLabel value="Muayene Tipi:   "></h:outputLabel>
+							<br/>
+							<p:column colspan="20">
+								<h:outputLabel value="Randevu Tarihi:     "></h:outputLabel>
+								<h:outputLabel
+									value="#{muayeneController.randevu.baslangicTarihi}"></h:outputLabel>
 							</p:column>
-							<p:column colspan="1">
+						</p:row>
+						<br/>
+						<br/>
+						
+						
+						<p:row>
+<!-- 							<p:column colspan="1"> -->
+<!-- 								<h:outputLabel value="Muayene Tipi:   "></h:outputLabel> -->
+<!-- 							</p:column> -->
+							<p:column colspan="10">
 								<h:outputLabel value=""></h:outputLabel>
 							</p:column>
-							<p:column colspan="1">
+							<p:column colspan="10">
 								<p:selectOneMenu value="#{muayeneController.mtId}" filter="true">
 									<p:ajax listener="#{muayeneController.onMuayeneTipiChange}"
 										update="matList" />
-									<f:selectItems value="#{muayeneController.allMuayeneTipiList}"
+									<f:selectItem itemLabel="Muayene Tipi Seç" itemValue="#{null}" noSelectionOption="true" />
+									<f:selectItems  value="#{muayeneController.allMuayeneTipiList}"
 										var="mt" itemValue="#{mt.id}" itemLabel="#{mt.adi}" />
 								</p:selectOneMenu>
 							</p:column>
 						</p:row>
-
+						
 						<p:row>
-							<p:column colspan="2">
-								<h:outputLabel value="Muayene Alt Tipi:   "></h:outputLabel>
-							</p:column>
-							<p:column colspan="3">
+<!-- 							<p:column colspan="3"> -->
+<!-- 								<h:outputLabel value="Muayene Alt Tipi:   "></h:outputLabel> -->
+<!-- 							</p:column> -->
+							<p:column colspan="10">
 								<p:selectOneMenu value="#{muayeneController.matId}" id="matList"
 									filter="true">
+									<p:ajax listener="#{muayeneController.onMuayeneTipiChange}"
+										update="bilgiList" />
+									<f:selectItem itemLabel="Muayene Alt Tipi Seç" itemValue="#{null}" noSelectionOption="true" />
 									<f:selectItems value="#{muayeneController.muayeneAltTipiList}"
 										var="mat" itemValue="#{mat.id}" itemLabel="#{mat.adi}" />
 								</p:selectOneMenu>
 							</p:column>
 						</p:row>
 
+					<p:row>
 
 
-						<p:row>
-							<p:column colspan="1">
-								<h:outputLabel value="Adi:  "></h:outputLabel>
-							</p:column>
 							<p:column colspan="1">
 
-								<p:selectOneMenu value="#{muayeneController.bilgiId}"
+								<p:selectOneMenu value="#{muayeneController.bilgiId}" id="bilgiList"
 									filter="true">
+									<f:selectItem itemLabel="Bilgi Seç" itemValue="#{null}" noSelectionOption="true" />
 									<f:selectItems
-										value="#{muayeneController.allMuayeneBilgileriList}" var="bl"
+										value="#{muayeneController.muayeneBilgiList}" var="bl"
 										itemValue="#{bl.id}" itemLabel="#{bl.adi}" />
 								</p:selectOneMenu>
 							</p:column>
-							<p:column colspan="1">
-								<h:outputLabel value="Değeri:  "></h:outputLabel>
+						</p:row>
+						<br/>
+						<br/>
+							<p:row>
+							<p:column colspan="2">
+								<h:outputLabel value="Değeri:    "></h:outputLabel>
+								<p:inputText id="degeri"
+									value="#{muayeneController.mbd.degeri}" />
 							</p:column>
-							<p:column colspan="1">
-								<p:inputText id="randevuBilgiDegeri"
-									value="#{muayeneController.randevuBilgiDegeri}" />
+						</p:row>
+						
+						<p:row>
+							<p:column colspan="2">
+							<input type="hidden" name="hidden1" value="#{muayeneController.randevu.hasta.dosyaNo}" />
 							</p:column>
+						</p:row>
+						
+						<p:row>
+						<br/>
+						<br/>
 							<p:column colspan="1">
 								<p:commandButton id="addBilgi" value="Ekle"
 									actionListener="#{muayeneController.addBilgi}"
 									update="eventDetails" oncomplete="PF('myschedule').update();" />
 							</p:column>
 						</p:row>
+						
+						<br/>
+						<br/>
+
 
 						<p:row>
-							<p:column colspan="5">
-								<p:dataTable var="eb" tableStyle="width:auto"
-									value="#{muayeneController.eklenecekBilgiler}">
-									<p:column headerText="Id">
-										<h:outputText value="#{eb.mb.adi}" />
-									</p:column>
+							<p:column  colspan="5">
+								<p:dataTable  var="mbd"  
+									value="#{muayeneController.allListMuayeneBilgiDegeri}">
 
+									<p:column headerText="Muayene Tipi">
+										<h:outputText value="#{mbd.muayeneTipi.adi}" />
+									</p:column>
+									
+									<p:column headerText="Muayene Alt Tipi">
+										<h:outputText value="#{mbd.muayeneAltTipi.adi}" />
+									</p:column>
+									
+									<p:column headerText="Muayene Bilgisi">
+										<h:outputText value="#{mbd.muayeneBilgileri.adi}" />
+									</p:column>
+									
 									<p:column headerText="Değer">
-										<h:outputText value="#{eb.deger}" />
+										<h:outputText value="#{mbd.degeri}" />
 									</p:column>
 								</p:dataTable>
 							</p:column>
 						</p:row>
-
-						<p:row>
+						
+							<br/>
+							<br/>
+							
+							<p:row>
 							<p:column colspan="5">
-								<h:outputLabel value="Ücreti:    "></h:outputLabel>
-								<p:inputText id="ucreti"
-									value="#{muayeneController.randevu.ucreti}" />
+								
+							 
+							
+							
+								
+								
+								
 							</p:column>
 						</p:row>
-
-						<p:commandButton id="updateButton"
-							value="Muayene Bilgilerini Kaydet ve Kapat"
-							actionListener="#{muayeneController.updateEvent}"
-							oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
-
-
-						<p:row>
-							<p:column colspan="5">
-								<p:accordionPanel activeIndex="-1">
-									<p:tab title="Eski Randevular">
-										<h:panelGrid columns="2" cellpadding="10">
-
-
-											<p:dataTable var="rand"
-												value="#{muayeneController.eskiRandevular}" paginator="true"
-												rows="10"
-												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-												rowsPerPageTemplate="5,10,15" paginatorPosition="top"
-												id="eskiRandevularList">
-
-												<p:column headerText="Baslangıc Tarihi">
-													<h:outputText value="#{rand.baslangicTarihi}" />
-												</p:column>
-
-											</p:dataTable>
-										</h:panelGrid>
-									</p:tab>
-								</p:accordionPanel>
-
-							</p:column>
-						</p:row>
-
+</p:scrollPanel>
+						
+						
 					</h:panelGrid>
+
+
 				</p:dialog>
+			
 			</h:form>
 
 			<script type="text/javascript">
@@ -195,11 +208,22 @@
 					day : 'Gün',
 					allDayText : 'Tüm Gün'
 				};
+				
+				
+					
+				
+				
 			</script>
 			<style type="text/css">
 .value {
 	width: 1000px;
 }
+.myTable {
+	width: 100%;
+	height: 20%;
+}
+
+
 </style>
 
 		</ui:define>

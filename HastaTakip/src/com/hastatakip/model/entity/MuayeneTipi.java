@@ -12,9 +12,6 @@ public class MuayeneTipi {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Integer id;
-
-	
-
 	private String adi;
 
 	public Integer getId() {

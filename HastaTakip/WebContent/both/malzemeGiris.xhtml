@@ -7,7 +7,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:hal="http://java.sun.com/jsf/composite/composite"
+	xmlns:c="http://java.sun.com/jstl/core"
 	contentType="text/html">
+	
+
 
 	<ui:composition template="/template/commonLayout.xhtml">
 		<ui:define name="content">
@@ -31,11 +34,7 @@
 					<h:panelGrid columns="2" layout="grid">
 					
 						
-						<h:outputLabel value="Firma Adı:    "></h:outputLabel>
-					    <p:selectOneMenu value="#{malzemeController.firmaID}" filter="true">
-								<f:selectItems value="#{malzemeController.allFirmaList}" var="bl"
-								itemValue="#{bl.id}" itemLabel="#{bl.firmaAdi}" />
-						</p:selectOneMenu>
+
 
 						<h:outputLabel value="Malzeme Adı: "></h:outputLabel>
 						<p:inputText id="malzemeAdi"  value="#{malzemeController.mgb.malzemeAdi}"></p:inputText>
@@ -139,8 +138,42 @@
 						</p:cellEditor>
 					</p:column>
 
-
+						<p:column headerText="Giriş Miktarı" style="width:100px"
+						filterBy="#{sb.girisMiktari}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sb.girisMiktari}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText disabled="true"  value="#{sb.girisMiktari}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
 					
+					<p:column headerText="Çıkış Miktarı" style="width:100px"
+						filterBy="#{sb.cikisMiktari}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText  value="#{sb.cikisMiktari}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText disabled="true"  value="#{sb.cikisMiktari}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+						<p:column headerText="Stok Miktarı"  style="width:150px;  "
+						filterBy="#{sb.stok}">
+						<p:cellEditor>
+							<f:facet  name="output">
+								<h:outputText   value="#{sb.stok}   " /> 
+								<h:outputText  rendered="#{sb.stok le'10'}" value="stokta az kaldı!" style=" background-color: red; "  />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText disabled="true" value="#{sb.stok}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+						</p:column>
 
 		
 								

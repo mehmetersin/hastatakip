@@ -25,7 +25,7 @@ public class DepoDao {
 	
 	@SuppressWarnings("unchecked")
 	public List getAllDepoBilgileri() {
-		return entityManager.createQuery("select d from DepoBilgileri d ")
+		return entityManager.createQuery("select d from DepoBilgileri d ORDER BY d.malzemeBilgileri.malzemeAdi ")
 				.getResultList();
 	}
 	
@@ -56,8 +56,8 @@ public class DepoDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<DepoBilgileri> getFirmaMalzemeBilgisi(Integer firmaID, Integer malzemeID ) {
-		return entityManager.createQuery("select b from DepoBilgileri b where b.firmaBilgileri.id="+firmaID+"and b.malzemeBilgileri.id="+malzemeID)
+	public List<DepoBilgileri> getMalzemeBilgisi(Integer malzemeID ) {
+		return entityManager.createQuery("select b from DepoBilgileri b where b.malzemeBilgileri.id="+malzemeID)
 				.getResultList();
 	}
 }

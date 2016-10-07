@@ -48,6 +48,8 @@ public class DepoController implements Serializable{
 	private Integer firmaID;
 	private Integer malzemeID;
 	private Integer totalMiktar=0;
+	private Integer girisMiktar=0;
+	private Integer cikisMiktar=0;
 
 	
 	
@@ -130,6 +132,18 @@ public class DepoController implements Serializable{
 		this.allMalzemeGirisBilgileri = allMalzemeGirisBilgileri;
 	}
 	
+	public Integer getGirisMiktar() {
+		return girisMiktar;
+	}
+	public void setGirisMiktar(Integer girisMiktar) {
+		this.girisMiktar = girisMiktar;
+	}
+	public Integer getCikisMiktar() {
+		return cikisMiktar;
+	}
+	public void setCikisMiktar(Integer cikisMiktar) {
+		this.cikisMiktar = cikisMiktar;
+	}
 	public List<FirmaBilgileri> getAllFirmaList() {
 
 		return firmaDao.getAllFirma();
@@ -182,30 +196,56 @@ public class DepoController implements Serializable{
 			db.setFirmaBilgileri(firmaDao.getFirma(getFirmaID()));
 			db.setMalzemeBilgileri(malzemeDao.getMalzemeGirisBilgi(getMalzemeID()));
 			
-			List<DepoBilgileri> db1 = depoDao.getFirmaMalzemeBilgisi(getFirmaID(), getMalzemeID());
-			
+			List<DepoBilgileri> db1 = depoDao.getMalzemeBilgisi(getMalzemeID());
+			MalzemeGirisBilgileri mgb = malzemeDao.getMalzemeGirisBilgi(getMalzemeID());
 			if(db1 != null){
 				
 				
 				
 				for(int i=0; i<db1.size(); i++){
-					
+					if(db1.get(i).getGiriscikis().equals("Giriş")){
 					totalMiktar = totalMiktar + db1.get(i).getMiktar();
+					girisMiktar = girisMiktar + db1.get(i).getMiktar();
+				
+					
+					
+					}
+					else{
+					totalMiktar = totalMiktar - db1.get(i).getMiktar();
+					cikisMiktar = cikisMiktar + db1.get(i).getMiktar();
+					}
+						
 				}
+				
+				
 				
 			
 				if(db.getGiriscikis().equals("Çıkış")){
 					totalMiktar = totalMiktar - db.getMiktar();
-					db.setTotalMiktar(totalMiktar);
+					cikisMiktar = cikisMiktar + db.getMiktar();
+//					db.setTotalMiktar(totalMiktar);
+//					db.getMalzemeBilgileri().setStok(totalMiktar);
+//					MalzemeGirisBilgileri mgb = malzemeDao.getMalzemeGirisBilgi(getMalzemeID());
+//					mgb.setStok(totalMiktar);
+//					malzemeDao.merge(mgb);
 					
 				}
 				else{
 					totalMiktar = totalMiktar + db.getMiktar();
-					db.setTotalMiktar(totalMiktar);
-				
+					girisMiktar = girisMiktar + db.getMiktar();
+//					db.setTotalMiktar(totalMiktar);
+//					db.getMalzemeBilgileri().setStok(totalMiktar);
+					
+					
+					
 				}
 				
 			}
+			
+			mgb.setStok(totalMiktar);
+			mgb.setGirisMiktari(girisMiktar);
+			mgb.setCikisMiktari(cikisMiktar);
+			
 			
 			if (db.getId() != null) {
 				depo = depoDao.getDepoBilgisi(db.getId());
@@ -218,9 +258,16 @@ public class DepoController implements Serializable{
 				context.addMessage(null, new FacesMessage("Uyar�",
 						"Depo Bilgileri Ba�ar�yla G�ncellendi."));
 			} else {
+				if(totalMiktar >=0){
+				malzemeDao.merge(mgb);
 				depoDao.insert(db);
 				context.addMessage(null, new FacesMessage("Uyar�",
 						"Depo Bilgileri Ba�ar�yla Kaydedildi."));
+				}
+				else{
+					context.addMessage(null, new FacesMessage("Başarısız",
+							"Stok Miktarı 0'dan küçük olamaz."));
+				}
 			}
 
 			db = new DepoBilgileri();
@@ -240,7 +287,22 @@ public class DepoController implements Serializable{
 			DepoBilgileri dblgi = ((DepoBilgileri) event.getObject());
 
 			DepoBilgileri dblgi2 = depoDao.getDepoBilgisi(dblgi.getId());
-			totalMiktar = dblgi2.getTotalMiktar() - dblgi2.getMiktar();
+			
+			MalzemeGirisBilgileri mgb = malzemeDao.getMalzemeGirisBilgi(dblgi2.getMalzemeBilgileri().getId());
+			if(dblgi2.getGiriscikis().equals("Giriş")){
+			totalMiktar = mgb.getStok() - dblgi2.getMiktar();
+			girisMiktar = mgb.getGirisMiktari() - dblgi2.getMiktar();
+			mgb.setGirisMiktari(girisMiktar);
+			}
+			else{
+			totalMiktar = mgb.getStok() + dblgi2.getMiktar();
+			cikisMiktar = mgb.getCikisMiktari() - dblgi.getMiktar();
+			mgb.setCikisMiktari(cikisMiktar);
+			}
+			
+			
+			mgb.setStok(totalMiktar);
+			malzemeDao.merge(mgb);
 			
 			boolean result = depoDao.delete(dblgi2);
 			
@@ -270,17 +332,124 @@ public class DepoController implements Serializable{
 	}
 
 	public void onRowEdit(RowEditEvent event) {
-
+		
 		DepoBilgileri dblgi = ((DepoBilgileri) event.getObject());
-
+		DepoBilgileri dblgi2 = depoDao.getDepoBilgisi(dblgi.getId());
+		
+		String a = dblgi2.getGiriscikis();
+		String b = dblgi.getGiriscikis();
+		int a1 = dblgi2.getMiktar();
+		int b1 = dblgi.getMiktar();
+		
+		MalzemeGirisBilgileri mgb = malzemeDao.getMalzemeGirisBilgi(dblgi.getMalzemeBilgileri().getId());
+		
+		if(!a.equals(b) && a1 != b1){
+			
+		if(b.equals("Çıkış")){
+			
+			totalMiktar = mgb.getStok() - a1 - b1;
+			girisMiktar = mgb.getGirisMiktari() - a1;
+			cikisMiktar = mgb.getCikisMiktari() + b1;
+			mgb.setStok(totalMiktar);
+			mgb.setCikisMiktari(cikisMiktar);
+			mgb.setGirisMiktari(girisMiktar);
+//			malzemeDao.merge(mgb);
+			
+		}
+		else {
+			totalMiktar = mgb.getStok()+ a1 + b1;
+			girisMiktar = mgb.getGirisMiktari() + b1;
+			cikisMiktar = mgb.getCikisMiktari() - a1;
+			mgb.setCikisMiktari(cikisMiktar);
+			mgb.setGirisMiktari(girisMiktar);
+			mgb.setStok(totalMiktar);
+//			malzemeDao.merge(mgb);
+		}
+			
+		}
+		
+		else if(!a.equals(b)){
+		
+		if(dblgi.getGiriscikis().equals("Giriş")){
+		totalMiktar = mgb.getStok() + 2*dblgi.getMiktar();
+		girisMiktar = mgb.getGirisMiktari() + a1;
+		cikisMiktar = mgb.getCikisMiktari() - a1;
+		}
+		else{
+		totalMiktar = mgb.getStok() - 2*dblgi.getMiktar();
+		girisMiktar = mgb.getGirisMiktari() - a1;
+		cikisMiktar = mgb.getCikisMiktari() + a1;
+		}
+		mgb.setCikisMiktari(cikisMiktar);
+		mgb.setGirisMiktari(girisMiktar);
+		mgb.setStok(totalMiktar);
+//		malzemeDao.merge(mgb);
+		}
+		
+		else if(a1 != b1){
+			if(a.equals("Giriş")){
+				girisMiktar = mgb.getGirisMiktari() - a1 + b1;
+				mgb.setGirisMiktari(girisMiktar);
+			}
+			else{
+				cikisMiktar = mgb.getCikisMiktari() - a1 + b1;
+				mgb.setCikisMiktari(cikisMiktar);
+			}
 		
 		
+		
+		if(a1<b1 && a.equals("Giriş")){
+			
+			int sonuc = b1-a1;
+			totalMiktar = mgb.getStok() + sonuc;
+			mgb.setStok(totalMiktar);
+//			malzemeDao.merge(mgb);
+		}
+			
+		else if(a1<b1 && a.equals("Çıkış")){
+				
+			int sonuc = b1-a1;
+			totalMiktar = mgb.getStok() - sonuc;
+			mgb.setStok(totalMiktar);
+//			malzemeDao.merge(mgb);
+			}
+		
+		else if(a1>b1 && a.equals("Giriş")){
+			
+			int sonuc = a1-b1;
+			totalMiktar = mgb.getStok() - sonuc;
+			mgb.setStok(totalMiktar);
+//			malzemeDao.merge(mgb);
+			
+			}
+		else {
+			
+			int sonuc = a1-b1;
+			totalMiktar = mgb.getStok() + sonuc;
+			
+			
+		}
+		}
+			
+		
+			
+		
+//		mgb.setStok(totalMiktar);
+		if(totalMiktar >= 0 ){
+		malzemeDao.merge(mgb);
 		depoDao.merge(dblgi);
-
-		FacesMessage msg = new FacesMessage("Bilgiler G�ncellendi",
-				"Ba�ar�l�");
+		FacesMessage msg = new FacesMessage("Bilgiler Güncellendi",
+				"Başarılı");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+		else{
+			FacesMessage msg = new FacesMessage("Stok Miktarı 0'dan küçük olamaz.",
+					"Başarısız");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 		init(null);
+		
+		
 	}
 	
 	

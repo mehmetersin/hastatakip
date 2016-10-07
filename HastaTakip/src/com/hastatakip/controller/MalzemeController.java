@@ -126,7 +126,8 @@ public class MalzemeController implements Serializable {
 
 		FacesContext context = FacesContext.getCurrentInstance();
 		try {
-			mgb.setFirmaBilgileri(firmaDao.getFirma(getFirmaID()));
+		
+			mgb.setStok(0);
 			MalzemeGirisBilgileri mlzmgirisb = null;
 			
 			if (mgb.getId() != null) {
